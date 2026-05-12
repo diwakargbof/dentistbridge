@@ -41,33 +41,25 @@
 <body>
   <div id="root"></div>
 
-  <!-- 1. iOS device frame & design canvas primitives -->
-  <script type="text/babel" src="ios-frame.jsx"></script>
-  <script type="text/babel" src="design-canvas.jsx"></script>
-  <script type="text/babel" src="tweaks-panel.jsx"></script>
-
-  <!-- 2. Supabase client + auth + real-time hooks (must be before data.jsx) -->
+  <!-- 1. Supabase client + auth + real-time hooks (must be before data.jsx) -->
   <script type="text/babel" src="supabase.jsx"></script>
 
-  <!-- 3. Mock data + Supabase-aware data layer -->
+  <!-- 2. Mock data + Supabase-aware data layer -->
   <script type="text/babel" src="data.jsx"></script>
 
-  <!-- 4. Shared UI primitives -->
+  <!-- 3. Shared UI primitives -->
   <script type="text/babel" src="ui.jsx"></script>
 
-  <!-- 5. Screen components -->
+  <!-- 4. Screen components -->
   <script type="text/babel" src="screens-onboard.jsx"></script>
   <script type="text/babel" src="screens-tech.jsx"></script>
   <script type="text/babel" src="screens-dentist.jsx"></script>
   <script type="text/babel" src="screens-chat.jsx"></script>
 
-  <!-- 6. Interactive phone prototype router -->
+  <!-- 5. App router (no iOS frame; renders in full viewport) -->
   <script type="text/babel" src="phone.jsx"></script>
 
-  <!-- 7. Desktop artboards -->
-  <script type="text/babel" src="desktop.jsx"></script>
-
-  <!-- 8. Root app — mounts everything -->
+  <!-- 6. Root app — auth gate + mounts Phone -->
   <script type="text/babel" src="app.jsx"></script>
 </body>
 </html>

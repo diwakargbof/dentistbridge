@@ -117,31 +117,28 @@ function Phone({ role = 'tech', initialScreen, embedded = false }) {
   const showTab = !isChrome;
 
   return (
-    <IOSDevice width={390} height={844}>
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-          {body}
-          {modal === 'shade' && (
-            <ShadePicker
-              imageUrl={shadeImageUrl}
-              onClose={() => { setModal(null); setShadeImageUrl(null); }}
-              onSave={(result) => {
-                if (window.CHAIRSIDE_SUPABASE?.isConfigured && selectedCase) {
-                  window.CHAIRSIDE_SUPABASE.updateCaseNotes(selectedCase, { shade: result.best_match })
-                    .catch(e => console.error('Save shade:', e));
-                }
-                setModal(null);
-                setShadeImageUrl(null);
-              }}
-            />
-          )}
-          {modal === 'pay' && <PaymentConfirm onClose={() => setModal(null)} onConfirm={() => setModal(null)} />}
-        </div>
-        {showTab && <Tabbar tabs={tabs} active={activeTab} onChange={onTab} />}
-        {/* Home-indicator gap */}
-        <div style={{ height: 24, background: showTab ? 'rgba(253,251,246,0.85)' : 'transparent', borderTop: showTab ? '1px solid var(--line)' : 'none' }} />
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+        {body}
+        {modal === 'shade' && (
+          <ShadePicker
+            imageUrl={shadeImageUrl}
+            onClose={() => { setModal(null); setShadeImageUrl(null); }}
+            onSave={(result) => {
+              if (window.CHAIRSIDE_SUPABASE?.isConfigured && selectedCase) {
+                window.CHAIRSIDE_SUPABASE.updateCaseNotes(selectedCase, { shade: result.best_match })
+                  .catch(e => console.error('Save shade:', e));
+              }
+              setModal(null);
+              setShadeImageUrl(null);
+            }}
+          />
+        )}
+        {modal === 'pay' && <PaymentConfirm onClose={() => setModal(null)} onConfirm={() => setModal(null)} />}
       </div>
-    </IOSDevice>
+      {showTab && <Tabbar tabs={tabs} active={activeTab} onChange={onTab} />}
+      <div style={{ height: 'env(safe-area-inset-bottom, 0px)', background: showTab ? 'rgba(253,251,246,0.85)' : 'transparent' }} />
+    </div>
   );
 }
 
@@ -172,8 +169,14 @@ function LabProfileScreen() {
           <SectionList title="Settings" rows={[
             { icon: 'wallet', label: 'Payments & UPI' },
             { icon: 'bell', label: 'Notifications' },
-            { icon: 'switch', label: 'Switch to dentist account' },
           ]} />
+          <button
+            className="btn btn-ghost btn-block"
+            style={{ marginTop: 4 }}
+            onClick={() => window.CHAIRSIDE_SUPABASE?.signOut().catch(console.error)}
+          >
+            Sign out
+          </button>
         </div>
       </div>
     </div>
@@ -201,8 +204,14 @@ function DentistMeScreen() {
           <SectionList title="Settings" rows={[
             { icon: 'bell', label: 'Notifications' },
             { icon: 'profile', label: 'Clinic profile' },
-            { icon: 'switch', label: 'Switch to lab account' },
           ]} />
+          <button
+            className="btn btn-ghost btn-block"
+            style={{ marginTop: 4 }}
+            onClick={() => window.CHAIRSIDE_SUPABASE?.signOut().catch(console.error)}
+          >
+            Sign out
+          </button>
         </div>
       </div>
     </div>

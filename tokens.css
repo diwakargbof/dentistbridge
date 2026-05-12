@@ -96,7 +96,7 @@ body {
   font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
   color: var(--ink);
 }
-.scr-pad-top { padding-top: 58px; }
+.scr-pad-top { padding-top: max(env(safe-area-inset-top), 16px); }
 .scr-pad-bot { padding-bottom: 32px; }
 .scr-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
 .scr-body::-webkit-scrollbar { display: none; }
@@ -376,3 +376,22 @@ textarea.field { height: auto; padding: 12px 14px; min-height: 80px; line-height
 /* Skinny scrollbars off */
 .scr-body, .kan-scroll { scrollbar-width: none; }
 .kan-scroll::-webkit-scrollbar { display: none; }
+
+/* Real-app frame — replaces IOSDevice chrome */
+.app-frame-outer {
+  position: fixed; inset: 0;
+  display: flex; align-items: stretch; justify-content: center;
+  background: var(--bg);
+}
+.app-frame-inner {
+  width: 100%; max-width: 430px;
+  background: var(--bg);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+@media (min-width: 600px) {
+  .app-frame-outer { background: var(--bg-2); }
+  .app-frame-inner {
+    box-shadow: 0 0 0 1px var(--line), 0 0 80px rgba(28,22,18,0.06);
+  }
+}
