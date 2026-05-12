@@ -1,0 +1,20 @@
+{
+  "name": "chairside",
+  "version": "1.0.0",
+  "description": "Chairside — Dental lab platform connecting dentists and technicians",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/build.js && npx serve . -p 3000",
+    "start": "npx serve . -p 3000"
+  },
+  "devDependencies": {
+    "dotenv": "^16.6.1",
+    "serve": "^14.2.6"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.95.2"
+  }
+}

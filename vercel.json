@@ -1,0 +1,13 @@
+{
+  "buildCommand": "node scripts/build.js",
+  "outputDirectory": ".",
+  "framework": null,
+  "headers": [
+    {
+      "source": "/(.*)\\.jsx",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript" }
+      ]
+    }
+  ]
+}

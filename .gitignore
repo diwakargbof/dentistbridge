@@ -1,0 +1,14 @@
+# Environment / secrets
+.env
+.env.local
+
+# Generated — rebuilt on every deploy
+config.js
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
