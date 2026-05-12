@@ -125,6 +125,10 @@ begin
   )
   on conflict (id) do nothing;
   return new;
+exception when others then
+  -- Never block auth user creation if the profile insert fails.
+  -- The JS signUp() call upserts the profile row as a fallback.
+  return new;
 end;
 $$;
 
