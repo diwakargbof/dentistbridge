@@ -153,10 +153,25 @@ create trigger cases_updated_at
 
 -- ─────────────────────────────────────────────────────────────
 -- RLS + POLICIES
--- All tables first, then policies. Cross-table policies (those whose
--- USING clause references a table other than the one being secured)
--- come last, after all referenced tables exist.
+-- Drop existing policies first so this script is safe to re-run.
+-- CREATE POLICY has no IF NOT EXISTS; it errors on duplicates.
 -- ─────────────────────────────────────────────────────────────
+
+-- Drop all public-schema table policies (safe if they don't exist yet)
+do $$ declare r record; begin
+  for r in (
+    select policyname, tablename from pg_policies
+    where schemaname = 'public'
+      and tablename in ('profiles','labs','services','clinics','cases','attachments','messages')
+  ) loop
+    execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename);
+  end loop;
+end $$;
+
+-- Drop storage policies
+drop policy if exists "storage: authenticated upload" on storage.objects;
+drop policy if exists "storage: participant read"      on storage.objects;
+drop policy if exists "storage: uploader delete"       on storage.objects;
 
 alter table profiles    enable row level security;
 alter table labs        enable row level security;
