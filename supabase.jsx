@@ -3,29 +3,38 @@
 
 (function () {
   const cfg = window.CHAIRSIDE_CONFIG || {};
-  const isConfigured = !!(cfg.supabaseUrl && cfg.supabaseAnonKey);
+
+  // Strip any accidental path from the URL (e.g. /rest/v1 appended by mistake).
+  // SUPABASE_URL must be just https://<project>.supabase.co — no trailing path.
+  function normalizeUrl(url) {
+    if (!url) return url;
+    try { const u = new URL(url); return u.protocol + '//' + u.host; }
+    catch (_) { return url; }
+  }
+  const supabaseUrl = normalizeUrl(cfg.supabaseUrl);
+  const isConfigured = !!(supabaseUrl && cfg.supabaseAnonKey);
 
   // ── Client ───────────────────────────────────────────────────
   const db = isConfigured
-    ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey)
+    ? window.supabase.createClient(supabaseUrl, cfg.supabaseAnonKey)
     : null;
 
   // ── Auth ─────────────────────────────────────────────────────
   async function signUp(email, password, profileData) {
     if (!db) throw new Error('Supabase not configured');
+
+    // Step 1: create auth user
     const { data, error } = await db.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          full_name: profileData.full_name,
-          role: profileData.role,
-        },
-      },
+      options: { data: { full_name: profileData.full_name, role: profileData.role } },
     });
-    if (error) throw error;
-    // The handle_new_user trigger already created a minimal profile row.
-    // Upsert here to fill in role, phone, city from the signup form.
+    if (error) {
+      const e = new Error('Auth signup failed: ' + error.message);
+      e.step = 'auth'; throw e;
+    }
+
+    // Step 2: upsert profile (trigger may have already created it; this adds phone/city)
     if (data.user) {
       const { error: pe } = await db.from('profiles').upsert({
         id: data.user.id,
@@ -34,7 +43,10 @@
         phone: profileData.phone || null,
         city: profileData.city || null,
       }, { onConflict: 'id' });
-      if (pe) console.warn('Profile upsert:', pe.message);
+      if (pe) {
+        const e = new Error('Profile save failed: ' + pe.message);
+        e.step = 'profile'; throw e;
+      }
     }
     return data;
   }

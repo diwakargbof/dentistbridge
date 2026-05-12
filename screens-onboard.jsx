@@ -117,11 +117,15 @@ function ScrSignup({ role, onDone, onBack, onLogin }) {
         full_name: fields.name, role, phone: fields.phone || null, city: fields.city || null,
       });
       if (isTech && fields.orgName && result?.user) {
-        await window.CHAIRSIDE_SUPABASE.createLab({
-          owner_id: result.user.id,
-          name: fields.orgName,
-          city: fields.city || null,
-        });
+        try {
+          await window.CHAIRSIDE_SUPABASE.createLab({
+            owner_id: result.user.id,
+            name: fields.orgName,
+            city: fields.city || null,
+          });
+        } catch (le) {
+          throw new Error('Lab creation failed: ' + le.message);
+        }
       }
       onDone && onDone();
     } catch (e) {
