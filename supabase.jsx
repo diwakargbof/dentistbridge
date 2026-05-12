@@ -34,8 +34,10 @@
       e.step = 'auth'; throw e;
     }
 
-    // Step 2: upsert profile (trigger may have already created it; this adds phone/city)
-    if (data.user) {
+    // Step 2: upsert profile — only possible when a session exists immediately
+    // (i.e. email confirmation is OFF). If session is null the user must confirm
+    // their email first; ensureProfile() will create the row on first login.
+    if (data.user && data.session) {
       const { error: pe } = await db.from('profiles').upsert({
         id: data.user.id,
         role: profileData.role,
@@ -416,6 +418,24 @@
 
   // ── React hooks ──────────────────────────────────────────────
 
+  // Fetch the profile, creating it from auth metadata if it doesn't exist yet.
+  // This handles the email-confirmation flow: user confirms → logs in → no profile
+  // row exists yet (trigger was blocked by RLS, upsert was skipped). We create it
+  // here using the now-valid session.
+  async function ensureProfile(user) {
+    let p = await getProfile(user.id);
+    if (!p) {
+      const meta = user.user_metadata || {};
+      const { error } = await db.from('profiles').upsert({
+        id: user.id,
+        role: meta.role || 'dentist',
+        full_name: meta.full_name || user.email,
+      }, { onConflict: 'id' });
+      if (!error) p = await getProfile(user.id);
+    }
+    return p;
+  }
+
   function useAuth() {
     const [session, setSession] = React.useState(null);
     const [profile, setProfile] = React.useState(null);
@@ -426,13 +446,13 @@
 
       getSession().then(async s => {
         setSession(s);
-        if (s?.user) setProfile(await getProfile(s.user.id));
+        if (s?.user) setProfile(await ensureProfile(s.user));
         setLoading(false);
       });
 
       return onAuthStateChange(async (_event, s) => {
         setSession(s);
-        if (s?.user) setProfile(await getProfile(s.user.id));
+        if (s?.user) setProfile(await ensureProfile(s.user));
         else setProfile(null);
       });
     }, []);

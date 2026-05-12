@@ -101,6 +101,7 @@ function ScrSignup({ role, onDone, onBack, onLogin }) {
   const [fields, setFields] = React.useState({ name: '', orgName: '', city: '', phone: '', email: '', password: '' });
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const [emailSent, setEmailSent] = React.useState(false);
 
   const set = key => e => setFields(f => ({ ...f, [key]: e.target.value }));
 
@@ -116,6 +117,12 @@ function ScrSignup({ role, onDone, onBack, onLogin }) {
       const result = await window.CHAIRSIDE_SUPABASE.signUp(fields.email, fields.password, {
         full_name: fields.name, role, phone: fields.phone || null, city: fields.city || null,
       });
+      if (!result?.session) {
+        // Email confirmation is ON — user must click the link before logging in.
+        // Profile and lab will be created on first login via ensureProfile().
+        setEmailSent(true);
+        return;
+      }
       if (isTech && fields.orgName && result?.user) {
         try {
           await window.CHAIRSIDE_SUPABASE.createLab({
@@ -133,6 +140,23 @@ function ScrSignup({ role, onDone, onBack, onLogin }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (emailSent) {
+    return (
+      <div className="scr">
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 28px 40px', textAlign: 'center', gap: 16 }}>
+          <div style={{ width: 56, height: 56, borderRadius: 16, background: 'var(--clay-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="bell" size={24} color="var(--clay-ink)" />
+          </div>
+          <div className="serif" style={{ fontSize: 28, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Check your email</div>
+          <div className="muted" style={{ fontSize: 15, lineHeight: 1.5, maxWidth: 280 }}>
+            We sent a confirmation link to <strong style={{ color: 'var(--ink)' }}>{fields.email}</strong>. Click it to activate your account, then log in.
+          </div>
+          <button className="btn btn-block" style={{ marginTop: 8 }} onClick={onLogin}>Go to log in</button>
+        </div>
+      </div>
+    );
   }
 
   return (
