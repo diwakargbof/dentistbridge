@@ -33,7 +33,7 @@
         full_name: profileData.full_name,
         phone: profileData.phone || null,
         city: profileData.city || null,
-      });
+      }, { onConflict: 'id' });
       if (pe) console.warn('Profile upsert:', pe.message);
     }
     return data;
