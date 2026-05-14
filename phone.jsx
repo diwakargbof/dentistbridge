@@ -1,132 +1,197 @@
 // phone.jsx — interactive prototype router
-// Single iPhone frame that the user can click through.
-// Holds nav state, role toggle, and modal stack.
+// Routes between screens, threads userId/userProfile to all screens.
+// selectedCase / selectedLab / selectedService are full objects, not IDs.
 
-function Phone({ role = 'tech', initialScreen, embedded = false }) {
-  const [screen, setScreen] = React.useState(initialScreen || (role === 'tech' ? 'tech-home' : 'dent-home'));
+function Phone({ role = 'tech', userId, userProfile, onSwitchProfile }) {
+  const [screen, setScreen] = React.useState(role === 'tech' ? 'tech-home' : 'dent-home');
   const [caseView, setCaseView] = React.useState('board');
   const [modal, setModal] = React.useState(null);
   const [shadeImageUrl, setShadeImageUrl] = React.useState(null);
-  const [selectedCase, setSelectedCase] = React.useState('C-4821');
-  const [selectedService, setSelectedService] = React.useState('s1');
-  const [selectedTech, setSelectedTech] = React.useState('t1');
-  const [signupRole, setSignupRole] = React.useState(null);
+  const [selectedCase, setSelectedCase] = React.useState(null);   // full case object
+  const [selectedLab, setSelectedLab] = React.useState(null);     // full lab object
+  const [selectedService, setSelectedService] = React.useState(null); // full service object
 
-  // When role changes externally, reset home
   React.useEffect(() => {
     setScreen(role === 'tech' ? 'tech-home' : 'dent-home');
   }, [role]);
 
   const techTabs = [
-    { id: 'tech-home', icon: 'cases', label: 'Cases' },
-    { id: 'tech-catalog', icon: 'catalog', label: 'Catalog' },
+    { id: 'tech-home',      icon: 'cases',    label: 'Cases' },
+    { id: 'tech-catalog',   icon: 'catalog',  label: 'Catalog' },
     { id: 'tech-templates', icon: 'template', label: 'Templates' },
-    { id: 'tech-profile', icon: 'profile', label: 'Lab' },
+    { id: 'tech-profile',   icon: 'profile',  label: 'Lab' },
   ];
   const dentTabs = [
-    { id: 'dent-home', icon: 'home', label: 'Home' },
-    { id: 'dent-browse', icon: 'search', label: 'Labs' },
+    { id: 'dent-home',    icon: 'home',    label: 'Home' },
+    { id: 'dent-browse',  icon: 'search',  label: 'Labs' },
     { id: 'dent-archive', icon: 'archive', label: 'Archive' },
     { id: 'dent-profile', icon: 'profile', label: 'Me' },
   ];
   const tabs = role === 'tech' ? techTabs : dentTabs;
   const activeTab = tabs.find(t => screen.startsWith(t.id.split('-').slice(0, 2).join('-')))?.id || tabs[0].id;
-  const onTab = id => setScreen(id);
 
-  // Screens
   let body = null;
   switch (screen) {
-    case 'welcome':
-      body = <ScrWelcome onContinue={() => setScreen('role')} />;
-      break;
-    case 'role':
-      body = <ScrRole picked={signupRole} onPick={(r, go) => { setSignupRole(r); if (go) setScreen('signup'); }} />;
-      break;
-    case 'signup':
-      body = <ScrSignup role={signupRole} onDone={() => setScreen(signupRole === 'technician' ? 'tech-home' : 'dent-home')} />;
+    // ── Tech screens ──────────────────────────────────────────
+    case 'tech-home':
+      body = (
+        <TechHome
+          userId={userId}
+          userProfile={userProfile}
+          caseView={caseView}
+          setCaseView={setCaseView}
+          onOpenCase={c => { setSelectedCase(c); setScreen('tech-case'); }}
+        />
+      );
       break;
 
-    case 'tech-home':
-      body = <TechHome caseView={caseView} setCaseView={setCaseView}
-        onOpenCase={(id) => { setSelectedCase(id); setScreen('tech-case'); }} />;
-      break;
     case 'tech-case':
-      body = <TechCaseDetail caseId={selectedCase}
-        onBack={() => setScreen('tech-home')}
-        onOpenChat={() => setScreen('chat-tech')}
-        onAdvance={() => alert('Stage advanced (demo)')} />;
+      body = (
+        <TechCaseDetail
+          cas={selectedCase}
+          userId={userId}
+          onBack={() => setScreen('tech-home')}
+          onOpenChat={() => setScreen('chat-tech')}
+          onAdvance={updated => setSelectedCase(prev => ({ ...prev, stage: updated.stage }))}
+        />
+      );
       break;
+
     case 'tech-catalog':
-      body = <TechCatalog onOpenService={(id) => { setSelectedService(id); setScreen('tech-workflow'); }} />;
+      body = (
+        <TechCatalog
+          userId={userId}
+          onOpenService={svc => { setSelectedService(svc); setScreen('tech-workflow'); }}
+        />
+      );
       break;
+
     case 'tech-workflow':
-      body = <TechWorkflowEditor serviceId={selectedService} onBack={() => setScreen('tech-catalog')} />;
+      body = (
+        <TechWorkflowEditor
+          service={selectedService}
+          onBack={() => setScreen('tech-catalog')}
+        />
+      );
       break;
+
     case 'tech-templates':
       body = <TechTemplates />;
       break;
+
     case 'tech-profile':
-      body = <LabProfileScreen />;
+      body = (
+        <LabProfileScreen
+          userId={userId}
+          userProfile={userProfile}
+          onSwitchProfile={onSwitchProfile}
+        />
+      );
       break;
 
+    // ── Dentist screens ───────────────────────────────────────
     case 'dent-home':
-      body = <DentistHome
-        onOpenCase={(id) => { setSelectedCase(id); setScreen('chat-dent'); }}
-        onBrowse={() => setScreen('dent-browse')} />;
-      break;
-    case 'dent-browse':
-      body = <DentistBrowse onOpenTech={(id) => { setSelectedTech(id); setScreen('dent-tech'); }} />;
-      break;
-    case 'dent-tech':
-      body = <DentistTechProfile techId={selectedTech}
-        onBack={() => setScreen('dent-browse')}
-        onAssign={(sid) => { if (sid) setSelectedService(sid); setScreen('dent-assign'); }} />;
-      break;
-    case 'dent-assign':
-      body = <DentistAssign techId={selectedTech} serviceId={selectedService}
-        onBack={() => setScreen('dent-tech')}
-        onSent={() => setScreen('chat-dent')} />;
-      break;
-    case 'dent-archive':
-      body = <ArchiveScreen role="dentist" />;
-      break;
-    case 'dent-profile':
-      body = <DentistMeScreen />;
+      body = (
+        <DentistHome
+          userId={userId}
+          userProfile={userProfile}
+          onOpenCase={c => { setSelectedCase(c); setScreen('chat-dent'); }}
+          onBrowse={() => setScreen('dent-browse')}
+        />
+      );
       break;
 
+    case 'dent-browse':
+      body = (
+        <DentistBrowse
+          onOpenLab={lab => { setSelectedLab(lab); setScreen('dent-tech'); }}
+        />
+      );
+      break;
+
+    case 'dent-tech':
+      body = (
+        <DentistTechProfile
+          lab={selectedLab}
+          onBack={() => setScreen('dent-browse')}
+          onAssign={svc => { setSelectedService(svc || null); setScreen('dent-assign'); }}
+        />
+      );
+      break;
+
+    case 'dent-assign':
+      body = (
+        <DentistAssign
+          lab={selectedLab}
+          userId={userId}
+          initialService={selectedService}
+          onBack={() => setScreen('dent-tech')}
+          onSent={newCase => { setSelectedCase(newCase); setScreen('chat-dent'); }}
+        />
+      );
+      break;
+
+    case 'dent-archive':
+      body = <ArchiveScreen role="dentist" userId={userId} />;
+      break;
+
+    case 'dent-profile':
+      body = (
+        <DentistMeScreen
+          userId={userId}
+          userProfile={userProfile}
+          onSwitchProfile={onSwitchProfile}
+        />
+      );
+      break;
+
+    // ── Chat screens ──────────────────────────────────────────
     case 'chat-tech':
-      body = <ChatScreen role="tech" caseId={selectedCase}
-        onBack={() => setScreen('tech-case')}
-        onOpenShade={(url) => { setShadeImageUrl(url || null); setModal('shade'); }}
-        onOpenPay={() => setModal('pay')} />;
+      body = (
+        <ChatScreen
+          cas={selectedCase}
+          role="tech"
+          userId={userId}
+          onBack={() => setScreen('tech-case')}
+          onOpenShade={url => { setShadeImageUrl(url || null); setModal('shade'); }}
+          onOpenPay={() => setModal('pay')}
+        />
+      );
       break;
+
     case 'chat-dent':
-      body = <ChatScreen role="dentist" caseId={selectedCase}
-        onBack={() => setScreen('dent-home')}
-        onOpenShade={(url) => { setShadeImageUrl(url || null); setModal('shade'); }}
-        onOpenPay={() => setModal('pay')} />;
+      body = (
+        <ChatScreen
+          cas={selectedCase}
+          role="dentist"
+          userId={userId}
+          onBack={() => setScreen('dent-home')}
+          onOpenShade={url => { setShadeImageUrl(url || null); setModal('shade'); }}
+          onOpenPay={() => setModal('pay')}
+        />
+      );
       break;
+
     default:
       body = <div className="scr" />;
   }
 
-  const isChrome = ['welcome', 'role', 'signup'].includes(screen)
-    || screen.startsWith('chat-')
+  const isChrome = screen.startsWith('chat-')
     || ['tech-case', 'tech-workflow', 'dent-tech', 'dent-assign'].includes(screen);
-
   const showTab = !isChrome;
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
         {body}
+
         {modal === 'shade' && (
           <ShadePicker
             imageUrl={shadeImageUrl}
             onClose={() => { setModal(null); setShadeImageUrl(null); }}
-            onSave={(result) => {
-              if (window.CHAIRSIDE_SUPABASE?.isConfigured && selectedCase) {
-                window.CHAIRSIDE_SUPABASE.updateCaseNotes(selectedCase, { shade: result.best_match })
+            onSave={result => {
+              if (selectedCase?.id) {
+                window.CHAIRSIDE_SUPABASE.updateCaseNotes(selectedCase.id, { shade: result.best_match })
                   .catch(e => console.error('Save shade:', e));
               }
               setModal(null);
@@ -134,48 +199,70 @@ function Phone({ role = 'tech', initialScreen, embedded = false }) {
             }}
           />
         )}
-        {modal === 'pay' && <PaymentConfirm onClose={() => setModal(null)} onConfirm={() => setModal(null)} />}
+
+        {modal === 'pay' && (
+          <PaymentConfirm
+            cas={selectedCase}
+            onClose={() => setModal(null)}
+            onConfirm={() => {
+              if (selectedCase?.id) {
+                const amount = selectedCase.service?.price || 0;
+                window.CHAIRSIDE_SUPABASE.updateCasePayment(selectedCase.id, 'paid', amount)
+                  .then(updated => {
+                    if (updated) setSelectedCase(prev => ({ ...prev, payment_status: 'paid', payment_amount: amount }));
+                  })
+                  .catch(e => console.error('Confirm payment:', e));
+              }
+              setModal(null);
+            }}
+          />
+        )}
       </div>
-      {showTab && <Tabbar tabs={tabs} active={activeTab} onChange={onTab} />}
+      {showTab && <Tabbar tabs={tabs} active={activeTab} onChange={id => setScreen(id)} />}
       <div style={{ height: 'env(safe-area-inset-bottom, 0px)', background: showTab ? 'rgba(253,251,246,0.85)' : 'transparent' }} />
     </div>
   );
 }
 
-// Lightweight stubs for tabs not separately fleshed out
-function LabProfileScreen() {
-  const me = window.CHAIRSIDE_DATA.TECHS[0];
+// ──────────────────────────────────────────────────────────────
+// Tech lab profile screen
+// ──────────────────────────────────────────────────────────────
+function LabProfileScreen({ userId, userProfile, onSwitchProfile }) {
+  const myLab = window.CHAIRSIDE_SUPABASE.useMyLab(userId);
+  const services = myLab?.services || [];
+
   return (
     <div className="scr">
       <div className="scr-body scr-pad-top">
         <ScreenHeader title="Lab" />
         <div style={{ padding: '0 20px 20px' }} className="col gap-14">
           <div className="card row gap-12" style={{ alignItems: 'flex-start' }}>
-            <Avatar name={me.name} size={56} tone="clay" />
+            <Avatar name={userProfile?.full_name || 'Lab'} size={56} tone="clay" />
             <div>
-              <div style={{ fontSize: 16, fontWeight: 600 }}>{me.lab}</div>
-              <div className="muted" style={{ fontSize: 12.5 }}>{me.name} · {me.city}</div>
+              <div style={{ fontSize: 16, fontWeight: 600 }}>{myLab?.name || (userId ? '…' : '—')}</div>
+              <div className="muted" style={{ fontSize: 12.5 }}>
+                {userProfile?.full_name || '—'}{myLab?.city ? ` · ${myLab.city}` : ''}
+              </div>
               <div className="row gap-8" style={{ marginTop: 8 }}>
-                <Pill tone="ok" dot>Verified</Pill>
-                <Pill>{me.rating}★</Pill>
+                {myLab?.verified && <Pill tone="ok" dot>Verified</Pill>}
+                {myLab?.rating > 0 && <Pill>{myLab.rating}★</Pill>}
               </div>
             </div>
           </div>
+
           <SectionList title="Workspace" rows={[
-            { icon: 'workflow', label: 'Services & workflows', sub: '6 services' },
-            { icon: 'template', label: 'Message templates', sub: '12 templates' },
-            { icon: 'archive', label: 'Archive', sub: '142 closed cases' },
+            { icon: 'workflow', label: 'Services & workflows', sub: `${services.length} services` },
+            { icon: 'template', label: 'Message templates' },
+            { icon: 'archive', label: 'Archive' },
           ]} />
+
           <SectionList title="Settings" rows={[
             { icon: 'wallet', label: 'Payments & UPI' },
             { icon: 'bell', label: 'Notifications' },
           ]} />
-          <button
-            className="btn btn-ghost btn-block"
-            style={{ marginTop: 4 }}
-            onClick={() => window.CHAIRSIDE_SUPABASE?.signOut().catch(console.error)}
-          >
-            Sign out
+
+          <button className="btn btn-ghost btn-block" style={{ marginTop: 4 }} onClick={onSwitchProfile}>
+            Switch profile
           </button>
         </div>
       </div>
@@ -183,34 +270,40 @@ function LabProfileScreen() {
   );
 }
 
-function DentistMeScreen() {
+// ──────────────────────────────────────────────────────────────
+// Dentist "Me" screen
+// ──────────────────────────────────────────────────────────────
+function DentistMeScreen({ userId, userProfile, onSwitchProfile }) {
+  const myClinic = window.CHAIRSIDE_SUPABASE.useMyClinic(userId);
+
   return (
     <div className="scr">
       <div className="scr-body scr-pad-top">
         <ScreenHeader title="Me" />
         <div style={{ padding: '0 20px 20px' }} className="col gap-14">
           <div className="card row gap-12" style={{ alignItems: 'flex-start' }}>
-            <Avatar name="Anaya Rao" size={56} tone="info" />
+            <Avatar name={userProfile?.full_name || 'Doctor'} size={56} tone="info" />
             <div>
-              <div style={{ fontSize: 16, fontWeight: 600 }}>Dr. Anaya Rao</div>
-              <div className="muted" style={{ fontSize: 12.5 }}>Rao Family Dental · Mumbai</div>
+              <div style={{ fontSize: 16, fontWeight: 600 }}>{userProfile?.full_name || '—'}</div>
+              <div className="muted" style={{ fontSize: 12.5 }}>
+                {myClinic?.name || '—'}{(myClinic?.city || userProfile?.city) ? ` · ${myClinic?.city || userProfile?.city}` : ''}
+              </div>
             </div>
           </div>
+
           <SectionList title="Workspace" rows={[
-            { icon: 'archive', label: 'Case archive', sub: '38 past cases' },
-            { icon: 'lab', label: 'Saved labs', sub: '4 favorites' },
+            { icon: 'archive', label: 'Case archive' },
+            { icon: 'lab', label: 'Saved labs' },
             { icon: 'wallet', label: 'Payment history' },
           ]} />
+
           <SectionList title="Settings" rows={[
             { icon: 'bell', label: 'Notifications' },
             { icon: 'profile', label: 'Clinic profile' },
           ]} />
-          <button
-            className="btn btn-ghost btn-block"
-            style={{ marginTop: 4 }}
-            onClick={() => window.CHAIRSIDE_SUPABASE?.signOut().catch(console.error)}
-          >
-            Sign out
+
+          <button className="btn btn-ghost btn-block" style={{ marginTop: 4 }} onClick={onSwitchProfile}>
+            Switch profile
           </button>
         </div>
       </div>
@@ -218,21 +311,82 @@ function DentistMeScreen() {
   );
 }
 
+// ──────────────────────────────────────────────────────────────
+// Archive screen (real data from Supabase)
+// ──────────────────────────────────────────────────────────────
+function ArchiveScreen({ role, userId }) {
+  const [archivedCases, setArchivedCases] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!userId) { setArchivedCases([]); return; }
+    const supabaseRole = role === 'tech' ? 'technician' : 'dentist';
+    window.CHAIRSIDE_SUPABASE.fetchArchivedCases(supabaseRole, userId)
+      .then(data => setArchivedCases(data ?? []));
+  }, [role, userId]);
+
+  // Group by counterpart
+  const groups = React.useMemo(() => {
+    if (!archivedCases) return null;
+    const map = {};
+    archivedCases.forEach(c => {
+      const key = role === 'tech' ? (c.dentist?.full_name || 'Unknown') : (c.lab?.name || 'Unknown');
+      if (!map[key]) map[key] = [];
+      map[key].push(`${c.service?.title || 'Service'} · ${c.patient_ref || '—'}`);
+    });
+    return map;
+  }, [archivedCases, role]);
+
+  return (
+    <div className="scr">
+      <div className="scr-body scr-pad-top">
+        <ScreenHeader title="Archive" sub="Closed cases" />
+        {archivedCases === null ? (
+          <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
+        ) : archivedCases.length === 0 ? (
+          <div style={{ padding: '40px 20px', textAlign: 'center' }}>
+            <div style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 6 }}>No archived cases yet</div>
+            <div style={{ color: 'var(--muted-2)', fontSize: 12 }}>Completed cases will appear here.</div>
+          </div>
+        ) : (
+          <div style={{ padding: '0 20px 20px' }} className="col gap-16">
+            {Object.entries(groups).map(([name, items]) => (
+              <div key={name}>
+                <div className="row between" style={{ marginBottom: 8 }}>
+                  <div className="row gap-8">
+                    <Avatar name={name} size={32} tone="clay" />
+                    <div style={{ fontWeight: 600, fontSize: 14.5 }}>{name}</div>
+                  </div>
+                  <span className="t-xs muted">{items.length}</span>
+                </div>
+                <div className="card" style={{ padding: 0 }}>
+                  {items.map((it, i) => (
+                    <div key={i} className="row gap-10 row-tap" style={{ padding: '12px 14px', borderBottom: i < items.length - 1 ? '1px solid var(--line)' : '0' }}>
+                      <Icon name="check-circle" size={16} color="var(--ok)" />
+                      <span style={{ flex: 1, fontSize: 13.5 }}>{it}</span>
+                      <span className="t-xs muted">paid</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────
+// Shared sub-components
+// ──────────────────────────────────────────────────────────────
 function SectionList({ title, rows }) {
   return (
     <div>
       <div className="t-eyebrow" style={{ marginLeft: 2, marginBottom: 8 }}>{title}</div>
       <div className="card" style={{ padding: 0 }}>
         {rows.map((r, i) => (
-          <div key={r.label} className="row gap-12 row-tap" style={{
-            padding: '14px 14px',
-            borderBottom: i < rows.length - 1 ? '1px solid var(--line)' : '0',
-          }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 9,
-              background: 'var(--surface-2)', color: 'var(--ink-2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
+          <div key={r.label} className="row gap-12 row-tap" style={{ padding: '14px 14px', borderBottom: i < rows.length - 1 ? '1px solid var(--line)' : '0' }}>
+            <div style={{ width: 32, height: 32, borderRadius: 9, background: 'var(--surface-2)', color: 'var(--ink-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Icon name={r.icon} size={16} />
             </div>
             <div style={{ flex: 1 }}>
@@ -242,48 +396,6 @@ function SectionList({ title, rows }) {
             <Icon name="chev-r" size={16} color="var(--muted)" />
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-function ArchiveScreen({ role }) {
-  const { CASES, SERVICES, DENTISTS, TECHS } = window.CHAIRSIDE_DATA;
-  // Mock archived cases grouped
-  const groups = role === 'dentist'
-    ? [{ name: 'Iyer Dental Lab', items: ['Zirconia Crown · #16', 'Zirconia Crown · #25', 'Bridge · #34–36'] },
-       { name: 'Bombay Dental Studio', items: ['Porcelain Veneer · UR1', 'Porcelain Veneer · UR2'] }]
-    : [{ name: 'Dr. Anaya Rao', items: ['Zirconia Crown · #14', 'Night Guard', 'Zirconia Crown · #25'] },
-       { name: 'Dr. Karan Mehta', items: ['Bridge · #34–36', 'E.max Onlay · #36'] }];
-  return (
-    <div className="scr">
-      <div className="scr-body scr-pad-top">
-        <ScreenHeader title="Archive" sub="Past cases, grouped." />
-        <div style={{ padding: '0 20px 20px' }} className="col gap-16">
-          {groups.map(g => (
-            <div key={g.name}>
-              <div className="row between" style={{ marginBottom: 8 }}>
-                <div className="row gap-8">
-                  <Avatar name={g.name} size={32} tone="clay" />
-                  <div style={{ fontWeight: 600, fontSize: 14.5 }}>{g.name}</div>
-                </div>
-                <span className="t-xs muted">{g.items.length}</span>
-              </div>
-              <div className="card" style={{ padding: 0 }}>
-                {g.items.map((it, i) => (
-                  <div key={it} className="row gap-10 row-tap" style={{
-                    padding: '12px 14px',
-                    borderBottom: i < g.items.length - 1 ? '1px solid var(--line)' : '0',
-                  }}>
-                    <Icon name="check-circle" size={16} color="var(--ok)" />
-                    <span style={{ flex: 1, fontSize: 13.5 }}>{it}</span>
-                    <span className="t-xs muted">paid</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

@@ -106,9 +106,31 @@
     if (!db) return null;
     const { data, error } = await db
       .from('labs')
-      .select('*, services(*)')
+      .select('*, services(*), owner:profiles(full_name)')
       .order('rating', { ascending: false });
     if (error) { console.error('fetchLabs:', error.message); return null; }
+    return data;
+  }
+
+  async function fetchMyLab(userId) {
+    if (!db || !userId) return null;
+    const { data, error } = await db
+      .from('labs')
+      .select('*, services(*)')
+      .eq('owner_id', userId)
+      .single();
+    if (error) { console.error('fetchMyLab:', error.message); return null; }
+    return data;
+  }
+
+  async function fetchMyClinic(userId) {
+    if (!db || !userId) return null;
+    const { data, error } = await db
+      .from('clinics')
+      .select('*')
+      .eq('owner_id', userId)
+      .single();
+    if (error) { console.error('fetchMyClinic:', error.message); return null; }
     return data;
   }
 
@@ -192,7 +214,7 @@
 
     const q = db
       .from('cases')
-      .select('*, service:services(*), lab:labs(*)')
+      .select('*, service:services(*), lab:labs(*, owner:profiles(full_name)), dentist:profiles!dentist_id(full_name)')
       .eq('archived', false)
       .order('created_at', { ascending: false });
 
@@ -215,7 +237,7 @@
     }
     const q = db
       .from('cases')
-      .select('*, service:services(*), lab:labs(*)')
+      .select('*, service:services(*), lab:labs(*, owner:profiles(full_name)), dentist:profiles!dentist_id(full_name)')
       .eq('archived', true)
       .order('updated_at', { ascending: false });
 
@@ -463,10 +485,28 @@
   function useCases(role, userId) {
     const [cases, setCases] = React.useState(null);
     React.useEffect(() => {
-      if (!userId) return;
-      fetchCases(role, userId).then(data => { if (data !== null) setCases(data); });
+      if (!userId) { setCases([]); return; }
+      fetchCases(role, userId).then(data => setCases(data ?? []));
     }, [role, userId]);
     return cases;
+  }
+
+  function useMyLab(userId) {
+    const [lab, setLab] = React.useState(undefined);
+    React.useEffect(() => {
+      if (!userId) { setLab(null); return; }
+      fetchMyLab(userId).then(data => setLab(data));
+    }, [userId]);
+    return lab; // undefined=loading, null=no lab, object=found
+  }
+
+  function useMyClinic(userId) {
+    const [clinic, setClinic] = React.useState(undefined);
+    React.useEffect(() => {
+      if (!userId) { setClinic(null); return; }
+      fetchMyClinic(userId).then(data => setClinic(data));
+    }, [userId]);
+    return clinic;
   }
 
   function useMessages(caseId) {
@@ -519,7 +559,10 @@
     // Real-time
     subscribeToMessages, subscribeToCase,
 
+    // Labs (extras)
+    fetchMyLab, fetchMyClinic,
+
     // Hooks
-    useAuth, useCases, useMessages, useLabs,
+    useAuth, useCases, useMessages, useLabs, useMyLab, useMyClinic,
   };
 })();
