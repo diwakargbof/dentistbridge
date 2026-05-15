@@ -60,10 +60,13 @@
   <script type="text/babel" src="screens-dentist.jsx"></script>
   <script type="text/babel" src="screens-chat.jsx"></script>
 
-  <!-- 5. App router (no iOS frame; renders in full viewport) -->
+  <!-- 5. Desktop layout (shown on wide viewports instead of phone shell) -->
+  <script type="text/babel" src="desktop.jsx"></script>
+
+  <!-- 6. App router (no iOS frame; renders in full viewport) -->
   <script type="text/babel" src="phone.jsx"></script>
 
-  <!-- 6. Root app — auth gate + mounts Phone -->
+  <!-- 7. Root app — auth gate + mounts Phone or Desktop layout -->
   <script type="text/babel" src="app.jsx"></script>
 </body>
 </html>

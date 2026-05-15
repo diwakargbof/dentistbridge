@@ -1,7 +1,20 @@
 // app.jsx — root app entry point
-// Profile picker (A = Doctor, B = Tech) replaces login flow.
-// Signs in to Supabase silently with pre-configured credentials,
-// or falls back to local role selection when Supabase not configured.
+// On wide viewports (≥900px): shows desktop layout (DesktopLabDash / DesktopDentistBrowse).
+// On narrow viewports: shows AppFrame + Phone shell.
+// Profile picker (A = Doctor, B = Tech) replaces login flow in both cases.
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = React.useState(
+    () => window.matchMedia('(min-width: 900px)').matches
+  );
+  React.useEffect(() => {
+    const mq = window.matchMedia('(min-width: 900px)');
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isDesktop;
+}
 
 function AppFrame({ children }) {
   return (
@@ -85,49 +98,11 @@ function App() {
   const [localRole, setLocalRole] = React.useState(null);
   const [signingIn, setSigningIn] = React.useState(null);
   const [error, setError] = React.useState(null);
-
-  if (loading) {
-    return (
-      <AppFrame>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Logo size={36} />
-        </div>
-      </AppFrame>
-    );
-  }
-
-  // Authenticated via Supabase — show the real app
-  if (session && profile) {
-    const role = profile.role === 'technician' ? 'tech' : 'dentist';
-    return (
-      <AppFrame>
-        <Phone
-          role={role}
-          userId={session.user.id}
-          userProfile={profile}
-          onSwitchProfile={() => window.CHAIRSIDE_SUPABASE.signOut().catch(console.error)}
-        />
-      </AppFrame>
-    );
-  }
-
-  // Local role selected (no Supabase or credentials not configured)
-  if (localRole) {
-    return (
-      <AppFrame>
-        <Phone
-          role={localRole}
-          userId={null}
-          userProfile={null}
-          onSwitchProfile={() => setLocalRole(null)}
-        />
-      </AppFrame>
-    );
-  }
+  const isDesktop = useIsDesktop();
 
   async function handlePick(which) {
-    const cfg = window.CHAIRSIDE_CONFIG || {};
-    const email = which === 'a' ? cfg.profileAEmail : cfg.profileBEmail;
+    const cfg      = window.CHAIRSIDE_CONFIG || {};
+    const email    = which === 'a' ? cfg.profileAEmail    : cfg.profileBEmail;
     const password = which === 'a' ? cfg.profileAPassword : cfg.profileBPassword;
 
     if (isConfigured && email && password) {
@@ -143,9 +118,63 @@ function App() {
         setSigningIn(null);
       }
     } else {
-      // No credentials or Supabase not configured — local role only
       setLocalRole(which === 'a' ? 'dentist' : 'tech');
     }
+  }
+
+  if (loading) {
+    return (
+      <AppFrame>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Logo size={36} />
+        </div>
+      </AppFrame>
+    );
+  }
+
+  const isAuthenticated = (session && profile) || localRole;
+
+  if (isAuthenticated) {
+    const role   = (session && profile)
+      ? (profile.role === 'technician' ? 'tech' : 'dentist')
+      : localRole;
+    const userId = session?.user?.id || null;
+
+    const handleSwitch = () => {
+      if (session) window.CHAIRSIDE_SUPABASE.signOut().catch(console.error);
+      else setLocalRole(null);
+    };
+
+    if (isDesktop) {
+      return (
+        <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: 'var(--bg)' }}>
+          {role === 'tech' ? (
+            <DesktopLabDash
+              userId={userId}
+              userProfile={profile}
+              onSwitchProfile={handleSwitch}
+            />
+          ) : (
+            <DesktopDentistBrowse
+              userId={userId}
+              userProfile={profile}
+              onSwitchProfile={handleSwitch}
+            />
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <AppFrame>
+        <Phone
+          role={role}
+          userId={userId}
+          userProfile={profile}
+          onSwitchProfile={handleSwitch}
+        />
+      </AppFrame>
+    );
   }
 
   return (
