@@ -38,6 +38,15 @@ create policy "templates: dentist read via case"
     where c.service_id = service_id and c.dentist_id = auth.uid()
   ));
 
+-- ─── Cases — doctor info + tech-created cases ────────────────
+-- Allow tech to create cases on a doctor's behalf (dentist_id becomes optional)
+alter table cases alter column dentist_id drop not null;
+
+-- Store doctor contact info directly on the case (for non-app doctors)
+alter table cases add column if not exists doctor_name  text;
+alter table cases add column if not exists doctor_phone text;
+alter table cases add column if not exists clinic_name  text;
+
 -- ─── Clinics — upsert safety ──────────────────────────────────
 -- Add a unique constraint on owner_id so upsert works
 alter table clinics

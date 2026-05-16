@@ -23,7 +23,7 @@ function KanbanBoard({ cases, onOpenCase }) {
             </h4>
             {items.map(c => {
               const stages = c.service?.stages || [];
-              const partner = c.dentist?.full_name || 'Dentist';
+              const partner = c.dentist?.full_name || c.doctor_name || 'Dentist';
               return (
                 <div key={c.id} className="kan-card row-tap" onClick={() => onOpenCase(c)} style={{ cursor: 'pointer' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
@@ -57,7 +57,7 @@ function KanbanBoard({ cases, onOpenCase }) {
   );
 }
 
-export default function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive }) {
+export default function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive, onNewCase }) {
   const { profile } = useAuth();
   const [cases, setCases]     = useState(null);
   const [lab, setLab]         = useState(null);
@@ -93,7 +93,12 @@ export default function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive
               {loading ? 'Loading…' : `${active.length} active · ${ready.length} ready to ship`}
             </div>
           </div>
-          <Avatar name={profile?.full_name || 'T'} size={40} tone="clay" />
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button className="btn btn-xs btn-clay" onClick={onNewCase}>
+              <Icon name="plus" size={13} />New case
+            </button>
+            <Avatar name={profile?.full_name || 'T'} size={40} tone="clay" />
+          </div>
         </div>
 
         {/* Stats strip */}

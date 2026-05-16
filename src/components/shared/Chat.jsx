@@ -330,15 +330,32 @@ export default function Chat({ initialCase, onBack, role }) {
   }
 
   const partner = isTech
-    ? caseData?.dentist?.full_name || 'Dentist'
+    ? caseData?.dentist?.full_name || caseData?.doctor_name || 'Dentist'
     : caseData?.lab?.name || 'Lab';
+
+  const doctorPhone = (caseData?.doctor_phone || caseData?.dentist?.phone || '').replace(/\D/g, '');
+  const waText = encodeURIComponent(
+    `Hi, update on case ${caseData?.id} (${caseData?.service?.title || ''}): currently at stage "${caseData?.service?.stages?.[caseData?.stage] || 'In progress'}".`
+  );
+  const waHref = doctorPhone ? `https://wa.me/91${doctorPhone}?text=${waText}` : null;
 
   return (
     <div className="scr" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
 
       {/* Header */}
       <NavBack title={partner} onBack={onBack} right={
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {waHref && (
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-xs"
+              style={{ background: '#25D366', border: 0, color: '#fff', height: 30, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5, padding: '0 10px', borderRadius: 8, fontSize: 12.5, fontWeight: 600 }}
+            >
+              <Icon name="send" size={12} color="#fff" />WA
+            </a>
+          )}
           {waitingPay && (
             <button onClick={handleConfirmPayment} className="btn btn-xs" style={{ background: 'var(--ok)', border: 0, color: '#fff', height: 30 }}>
               <Icon name="check" size={13} />Confirm pay
@@ -359,6 +376,11 @@ export default function Chat({ initialCase, onBack, role }) {
               {caseData?.id}
               {caseData?.patient_ref ? ` · ${caseData.patient_ref}` : ''}
             </div>
+            {caseData?.doctor_name && (
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>
+                {caseData.doctor_name}{caseData.clinic_name ? ` · ${caseData.clinic_name}` : ''}
+              </div>
+            )}
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             {caseData?.payment_status !== 'pending' && (

@@ -12,6 +12,7 @@ import DentistArchive   from './components/dentist/Archive.jsx';
 
 // ── Technician app ────────────────────────────────────────────
 import TechDashboard from './components/tech/Dashboard.jsx';
+import TechNewCase   from './components/tech/NewCase.jsx';
 import Services      from './components/tech/Services.jsx';
 import Templates     from './components/tech/Templates.jsx';
 import TechArchive   from './components/tech/Archive.jsx';
@@ -80,8 +81,9 @@ function TechApp() {
 
   if (current) {
     const { screen, props } = current;
-    if (screen === 'chat')    return <Chat initialCase={props.case} onBack={pop} role="tech" />;
-    if (screen === 'archive') return <TechArchive onBack={pop} onOpenCase={c => push('chat', { case: c })} />;
+    if (screen === 'chat')     return <Chat initialCase={props.case} onBack={pop} role="tech" />;
+    if (screen === 'archive')  return <TechArchive onBack={pop} onOpenCase={c => push('chat', { case: c })} />;
+    if (screen === 'new-case') return <TechNewCase onBack={pop} onCreated={c => { pop(); push('chat', { case: c }); }} />;
   }
 
   const tabs = [
@@ -94,7 +96,7 @@ function TechApp() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-        {tab === 'home'      && <TechDashboard onOpenCase={c => push('chat', { case: c })} onOpenCatalog={() => setTab('catalog')} onOpenArchive={() => push('archive')} />}
+        {tab === 'home'      && <TechDashboard onOpenCase={c => push('chat', { case: c })} onOpenCatalog={() => setTab('catalog')} onOpenArchive={() => push('archive')} onNewCase={() => push('new-case')} />}
         {tab === 'catalog'   && <Services />}
         {tab === 'templates' && <Templates />}
         {tab === 'profile'   && <Profile />}

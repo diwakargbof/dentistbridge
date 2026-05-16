@@ -1083,7 +1083,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState15(initialState) {
+        function useState16(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1095,7 +1095,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect11(create, deps) {
+        function useEffect12(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1878,7 +1878,7 @@ var require_react_development = __commonJS({
         exports.useContext = useContext2;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect11;
+        exports.useEffect = useEffect12;
         exports.useId = useId;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
@@ -1886,7 +1886,7 @@ var require_react_development = __commonJS({
         exports.useMemo = useMemo;
         exports.useReducer = useReducer;
         exports.useRef = useRef2;
-        exports.useState = useState15;
+        exports.useState = useState16;
         exports.useSyncExternalStore = useSyncExternalStore;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -2382,9 +2382,9 @@ var require_react_dom_development = __commonJS({
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
           __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
         }
-        var React16 = require_react();
+        var React17 = require_react();
         var Scheduler = require_scheduler();
-        var ReactSharedInternals = React16.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React17.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         var suppressWarning = false;
         function setSuppressWarning(newSuppressWarning) {
           {
@@ -3991,7 +3991,7 @@ var require_react_dom_development = __commonJS({
           {
             if (props.value == null) {
               if (typeof props.children === "object" && props.children !== null) {
-                React16.Children.forEach(props.children, function(child) {
+                React17.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -23587,7 +23587,7 @@ var require_react_jsx_runtime_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React16 = require_react();
+        var React17 = require_react();
         var REACT_ELEMENT_TYPE = Symbol.for("react.element");
         var REACT_PORTAL_TYPE = Symbol.for("react.portal");
         var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -23613,7 +23613,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
           return null;
         }
-        var ReactSharedInternals = React16.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React17.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function error(format) {
           {
             {
@@ -24463,11 +24463,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx16 = jsxWithValidationDynamic;
-        var jsxs15 = jsxWithValidationStatic;
+        var jsx17 = jsxWithValidationDynamic;
+        var jsxs16 = jsxWithValidationStatic;
         exports.Fragment = REACT_FRAGMENT_TYPE;
-        exports.jsx = jsx16;
-        exports.jsxs = jsxs15;
+        exports.jsx = jsx17;
+        exports.jsxs = jsxs16;
       })();
     }
   }
@@ -24486,7 +24486,7 @@ var require_jsx_runtime = __commonJS({
 });
 
 // src/app.jsx
-var import_react15 = __toESM(require_react());
+var import_react16 = __toESM(require_react());
 var import_client = __toESM(require_client());
 
 // src/context/AuthContext.jsx
@@ -25325,7 +25325,7 @@ function KanbanBoard({ cases, onOpenCase }) {
       items.map((c) => {
         var _a, _b, _c;
         const stages = ((_a = c.service) == null ? void 0 : _a.stages) || [];
-        const partner = ((_b = c.dentist) == null ? void 0 : _b.full_name) || "Dentist";
+        const partner = ((_b = c.dentist) == null ? void 0 : _b.full_name) || c.doctor_name || "Dentist";
         return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "kan-card row-tap", onClick: () => onOpenCase(c), style: { cursor: "pointer" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 5 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "mono", style: { fontSize: 10.5, color: "var(--muted)" }, children: c.id }),
@@ -25343,7 +25343,7 @@ function KanbanBoard({ cases, onOpenCase }) {
     ] }, b.key);
   }) });
 }
-function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive }) {
+function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive, onNewCase }) {
   var _a;
   const { profile } = useAuth();
   const [cases, setCases] = (0, import_react8.useState)(null);
@@ -25375,7 +25375,13 @@ function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive }) {
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "title", style: { marginTop: 4 }, children: "Cases" }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "sub", children: loading ? "Loading\u2026" : `${active.length} active \xB7 ${ready.length} ready to ship` })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Avatar, { name: (profile == null ? void 0 : profile.full_name) || "T", size: 40, tone: "clay" })
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "btn btn-xs btn-clay", onClick: onNewCase, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Icon, { name: "plus", size: 13 }),
+          "New case"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Avatar, { name: (profile == null ? void 0 : profile.full_name) || "T", size: 40, tone: "clay" })
+      ] })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: { padding: "4px 20px 14px" }, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "row gap-8", style: { overflowX: "auto" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Stat, { label: "Active", value: loading ? "\u2014" : String(active.length) }),
@@ -25403,22 +25409,133 @@ function TechDashboard({ onOpenCase, onOpenCatalog, onOpenArchive }) {
   ] }) });
 }
 
-// src/components/tech/Services.jsx
-var import_react10 = __toESM(require_react());
-
-// src/components/tech/ServiceForm.jsx
+// src/components/tech/NewCase.jsx
 var import_react9 = __toESM(require_react());
 var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+function ServiceRow2({ svc, selected, onClick }) {
+  var _a, _b;
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { onClick, className: "row-tap", style: {
+    background: selected ? "var(--surface)" : "var(--surface-2)",
+    border: selected ? "2px solid var(--ink)" : "1.5px solid var(--line)",
+    borderRadius: 14,
+    padding: "12px 14px",
+    cursor: "pointer"
+  }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { flex: 1 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { fontWeight: 600, fontSize: 14.5, letterSpacing: "-0.01em" }, children: svc.title }),
+      svc.description && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "muted", style: { fontSize: 12.5, marginTop: 2 }, children: svc.description }),
+      ((_a = svc.stages) == null ? void 0 : _a.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }, children: svc.stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { fontSize: 10.5, background: "var(--bg-2)", color: "var(--ink-3)", padding: "2px 8px", borderRadius: 999, border: "1px solid var(--line)" }, children: s }, i)) })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { textAlign: "right", flexShrink: 0 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { fontWeight: 700, fontSize: 16, letterSpacing: "-0.01em" }, children: [
+        "\u20B9",
+        (_b = svc.price) == null ? void 0 : _b.toLocaleString("en-IN")
+      ] }),
+      selected && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { width: 22, height: 22, borderRadius: 11, background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", marginTop: 6, marginLeft: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Icon, { name: "check", size: 13, color: "var(--bg)" }) })
+    ] })
+  ] }) });
+}
+function TechNewCase({ onBack, onCreated }) {
+  var _a;
+  const [services, setServices] = (0, import_react9.useState)(null);
+  const [selectedSvc, setSelectedSvc] = (0, import_react9.useState)(null);
+  const [doctorName, setDoctorName] = (0, import_react9.useState)("");
+  const [doctorPhone, setDoctorPhone] = (0, import_react9.useState)("");
+  const [clinicName, setClinicName] = (0, import_react9.useState)("");
+  const [patientRef, setPatientRef] = (0, import_react9.useState)("");
+  const [shade, setShade] = (0, import_react9.useState)("");
+  const [notes, setNotes] = (0, import_react9.useState)("");
+  const [loading, setLoading] = (0, import_react9.useState)(false);
+  const [loadingSvcs, setLoadingSvcs] = (0, import_react9.useState)(true);
+  const [error, setError] = (0, import_react9.useState)("");
+  (0, import_react9.useEffect)(() => {
+    api.services.mine().then((d) => {
+      setServices(d || []);
+      setLoadingSvcs(false);
+    }).catch(() => setLoadingSvcs(false));
+  }, []);
+  const activeServices = (services || []).filter((s) => s.active !== false);
+  (0, import_react9.useEffect)(() => {
+    if (activeServices.length === 1) setSelectedSvc(activeServices[0]);
+  }, [activeServices.length]);
+  async function handleCreate() {
+    if (!selectedSvc) {
+      setError("Select a service");
+      return;
+    }
+    if (!doctorName.trim()) {
+      setError("Doctor name is required");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const created = await api.cases.create({
+        service_id: selectedSvc.id,
+        doctor_name: doctorName.trim(),
+        doctor_phone: doctorPhone.trim() || null,
+        clinic_name: clinicName.trim() || null,
+        patient_ref: patientRef.trim() || null,
+        notes: notes.trim() || null,
+        shade: shade.trim() || null
+      });
+      onCreated(created);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "scr", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(NavBack, { title: "New Case", onBack }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "scr-body", style: { padding: "16px 20px 32px", display: "flex", flexDirection: "column", gap: 20 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "t-eyebrow", style: { marginBottom: 10 }, children: "Doctor details" }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Doctor name *", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", placeholder: "e.g. Dr. Anaya Rao", value: doctorName, onChange: (e) => setDoctorName(e.target.value) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Doctor phone (for WhatsApp updates)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", type: "tel", inputMode: "numeric", placeholder: "e.g. 9876543210", value: doctorPhone, onChange: (e) => setDoctorPhone(e.target.value) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Clinic name (optional)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", placeholder: "e.g. Smile Dental Clinic", value: clinicName, onChange: (e) => setClinicName(e.target.value) }) })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "t-eyebrow", style: { marginBottom: 10 }, children: "Select service" }),
+        loadingSvcs ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Spinner, {}) : activeServices.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { color: "var(--muted)", fontSize: 13.5, padding: "8px 0" }, children: "No services found. Add services in the Catalog tab first." }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: activeServices.map((s) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ServiceRow2, { svc: s, selected: (selectedSvc == null ? void 0 : selectedSvc.id) === s.id, onClick: () => setSelectedSvc(s) }, s.id)) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Patient reference (optional)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", placeholder: "e.g. Patient name or ID", value: patientRef, onChange: (e) => setPatientRef(e.target.value) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Shade guide (optional)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", placeholder: "e.g. A2, B1", value: shade, onChange: (e) => setShade(e.target.value) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Notes (optional)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("textarea", { className: "field", placeholder: "Special instructions, tooth number, etc.", rows: 3, value: notes, onChange: (e) => setNotes(e.target.value) }) }),
+      error && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
+      selectedSvc && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { background: "var(--clay-soft)", borderRadius: 12, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { fontSize: 12.5, color: "var(--clay-ink)", fontWeight: 500, marginBottom: 2 }, children: "Selected" }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { fontSize: 15, fontWeight: 600, color: "var(--clay-ink)" }, children: selectedSvc.title })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { fontSize: 20, fontWeight: 700, color: "var(--clay-ink)" }, children: [
+          "\u20B9",
+          (_a = selectedSvc.price) == null ? void 0 : _a.toLocaleString("en-IN")
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Button, { variant: "clay", block: true, onClick: handleCreate, disabled: loading || !selectedSvc || !doctorName.trim(), children: loading ? "Creating\u2026" : "Create case" })
+    ] })
+  ] });
+}
+
+// src/components/tech/Services.jsx
+var import_react11 = __toESM(require_react());
+
+// src/components/tech/ServiceForm.jsx
+var import_react10 = __toESM(require_react());
+var import_jsx_runtime10 = __toESM(require_jsx_runtime());
 var DEFAULT_STAGES = ["Received", "In Progress", "Ready"];
 function ServiceForm({ initial, onSave, onCancel }) {
   var _a;
-  const [title, setTitle] = (0, import_react9.useState)((initial == null ? void 0 : initial.title) || "");
-  const [desc, setDesc] = (0, import_react9.useState)((initial == null ? void 0 : initial.description) || "");
-  const [price, setPrice] = (0, import_react9.useState)((initial == null ? void 0 : initial.price) ? String(initial.price) : "");
-  const [stages, setStages] = (0, import_react9.useState)(((_a = initial == null ? void 0 : initial.stages) == null ? void 0 : _a.length) ? initial.stages : DEFAULT_STAGES);
-  const [stageInput, setStageInput] = (0, import_react9.useState)("");
-  const [loading, setLoading] = (0, import_react9.useState)(false);
-  const [error, setError] = (0, import_react9.useState)("");
+  const [title, setTitle] = (0, import_react10.useState)((initial == null ? void 0 : initial.title) || "");
+  const [desc, setDesc] = (0, import_react10.useState)((initial == null ? void 0 : initial.description) || "");
+  const [price, setPrice] = (0, import_react10.useState)((initial == null ? void 0 : initial.price) ? String(initial.price) : "");
+  const [stages, setStages] = (0, import_react10.useState)(((_a = initial == null ? void 0 : initial.stages) == null ? void 0 : _a.length) ? initial.stages : DEFAULT_STAGES);
+  const [stageInput, setStageInput] = (0, import_react10.useState)("");
+  const [loading, setLoading] = (0, import_react10.useState)(false);
+  const [error, setError] = (0, import_react10.useState)("");
   function addStage(e) {
     e.preventDefault();
     const s = stageInput.trim();
@@ -25458,73 +25575,73 @@ function ServiceForm({ initial, onSave, onCancel }) {
       setLoading(false);
     }
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: [
-    error && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Service name", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", placeholder: "e.g. Zirconia Crown", value: title, onChange: (e) => setTitle(e.target.value) }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Description (optional)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("textarea", { className: "field", placeholder: "What's included, materials used\u2026", rows: 2, value: desc, onChange: (e) => setDesc(e.target.value) }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Field, { label: "Price (\u20B9)", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", type: "number", min: "0", placeholder: "4200", value: price, onChange: (e) => setPrice(e.target.value) }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "t-eyebrow", style: { marginBottom: 8 }, children: "Workflow stages" }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }, children: stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", borderRadius: 8, padding: "8px 10px", border: "1px solid var(--line)" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { width: 20, height: 20, borderRadius: 10, background: i === 0 ? "var(--clay)" : i === stages.length - 1 ? "var(--ok)" : "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { color: "#fff", fontSize: 10, fontWeight: 700 }, children: i + 1 }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { flex: 1, fontSize: 13.5, fontWeight: 500 }, children: s }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: 4 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { onClick: () => moveStage(i, -1), disabled: i === 0, style: { border: 0, background: "transparent", cursor: "pointer", opacity: i === 0 ? 0.3 : 1, padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Icon, { name: "chev-d", size: 14, color: "var(--muted)", style: { transform: "rotate(180deg)" } }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { onClick: () => moveStage(i, 1), disabled: i === stages.length - 1, style: { border: 0, background: "transparent", cursor: "pointer", opacity: i === stages.length - 1 ? 0.3 : 1, padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Icon, { name: "chev-d", size: 14, color: "var(--muted)" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { onClick: () => removeStage(i), style: { border: 0, background: "transparent", cursor: "pointer", padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Icon, { name: "x", size: 14, color: "var(--danger)" }) })
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: [
+    error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Field, { label: "Service name", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { className: "field", placeholder: "e.g. Zirconia Crown", value: title, onChange: (e) => setTitle(e.target.value) }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Field, { label: "Description (optional)", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("textarea", { className: "field", placeholder: "What's included, materials used\u2026", rows: 2, value: desc, onChange: (e) => setDesc(e.target.value) }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Field, { label: "Price (\u20B9)", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { className: "field", type: "number", min: "0", placeholder: "4200", value: price, onChange: (e) => setPrice(e.target.value) }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "t-eyebrow", style: { marginBottom: 8 }, children: "Workflow stages" }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }, children: stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, background: "var(--surface-2)", borderRadius: 8, padding: "8px 10px", border: "1px solid var(--line)" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { width: 20, height: 20, borderRadius: 10, background: i === 0 ? "var(--clay)" : i === stages.length - 1 ? "var(--ok)" : "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "#fff", fontSize: 10, fontWeight: 700 }, children: i + 1 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { flex: 1, fontSize: 13.5, fontWeight: 500 }, children: s }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: 4 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { onClick: () => moveStage(i, -1), disabled: i === 0, style: { border: 0, background: "transparent", cursor: "pointer", opacity: i === 0 ? 0.3 : 1, padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "chev-d", size: 14, color: "var(--muted)", style: { transform: "rotate(180deg)" } }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { onClick: () => moveStage(i, 1), disabled: i === stages.length - 1, style: { border: 0, background: "transparent", cursor: "pointer", opacity: i === stages.length - 1 ? 0.3 : 1, padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "chev-d", size: 14, color: "var(--muted)" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { onClick: () => removeStage(i), style: { border: 0, background: "transparent", cursor: "pointer", padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "x", size: 14, color: "var(--danger)" }) })
         ] })
       ] }, i)) }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: addStage, style: { display: "flex", gap: 8 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("input", { className: "field", style: { flex: 1 }, placeholder: "Add stage (e.g. Glazed)", value: stageInput, onChange: (e) => setStageInput(e.target.value) }),
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Button, { type: "submit", variant: "ghost", size: "sm", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Icon, { name: "plus", size: 16 }) })
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("form", { onSubmit: addStage, style: { display: "flex", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { className: "field", style: { flex: 1 }, placeholder: "Add stage (e.g. Glazed)", value: stageInput, onChange: (e) => setStageInput(e.target.value) }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Button, { type: "submit", variant: "ghost", size: "sm", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "plus", size: 16 }) })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: 8, paddingTop: 4 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Button, { variant: "ghost", block: true, onClick: onCancel, children: "Cancel" }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Button, { variant: "clay", block: true, onClick: handleSave, disabled: loading, children: loading ? "Saving\u2026" : (initial == null ? void 0 : initial.id) ? "Save changes" : "Add service" })
+    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: 8, paddingTop: 4 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Button, { variant: "ghost", block: true, onClick: onCancel, children: "Cancel" }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Button, { variant: "clay", block: true, onClick: handleSave, disabled: loading, children: loading ? "Saving\u2026" : (initial == null ? void 0 : initial.id) ? "Save changes" : "Add service" })
     ] })
   ] });
 }
 
 // src/components/tech/Services.jsx
-var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+var import_jsx_runtime11 = __toESM(require_jsx_runtime());
 function ServiceCard({ svc, onEdit, onToggle, onDelete }) {
   var _a, _b, _c;
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "card", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: 10 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { flex: 1 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }, children: svc.title }),
-          !svc.active && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, background: "var(--warn-soft)", color: "#6b4d12", padding: "2px 7px", borderRadius: 999 }, children: "Inactive" })
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "card", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "flex-start", gap: 10 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { flex: 1 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }, children: svc.title }),
+          !svc.active && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: 10.5, background: "var(--warn-soft)", color: "#6b4d12", padding: "2px 7px", borderRadius: 999 }, children: "Inactive" })
         ] }),
-        svc.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "muted", style: { fontSize: 12.5, marginTop: 3, lineHeight: 1.4 }, children: svc.description }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 8, display: "flex", alignItems: "center", gap: 10 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: 16, fontWeight: 700, color: "var(--clay-ink)" }, children: [
+        svc.description && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "muted", style: { fontSize: 12.5, marginTop: 3, lineHeight: 1.4 }, children: svc.description }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { marginTop: 8, display: "flex", alignItems: "center", gap: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: 16, fontWeight: 700, color: "var(--clay-ink)" }, children: [
             "\u20B9",
             (_a = svc.price) == null ? void 0 : _a.toLocaleString("en-IN")
           ] }),
-          ((_b = svc.stages) == null ? void 0 : _b.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "muted", style: { fontSize: 12 }, children: [
+          ((_b = svc.stages) == null ? void 0 : _b.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { className: "muted", style: { fontSize: 12 }, children: [
             svc.stages.length,
             " stages"
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: 6 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "btn-icon", onClick: onEdit, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "edit", size: 16 }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "btn-icon", onClick: onToggle, title: svc.active ? "Deactivate" : "Activate", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: svc.active ? "eye" : "eye", size: 16, color: svc.active ? "var(--ok)" : "var(--muted)" }) })
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: 6 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { className: "btn-icon", onClick: onEdit, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "edit", size: 16 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { className: "btn-icon", onClick: onToggle, title: svc.active ? "Deactivate" : "Activate", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: svc.active ? "eye" : "eye", size: 16, color: svc.active ? "var(--ok)" : "var(--muted)" }) })
       ] })
     ] }),
-    ((_c = svc.stages) == null ? void 0 : _c.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginTop: 10 }, children: svc.stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-      i > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "chev-r", size: 10, color: "var(--muted-2)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 11, background: "var(--surface-2)", color: "var(--ink-2)", padding: "3px 8px", borderRadius: 999, border: "1px solid var(--line)" }, children: s })
+    ((_c = svc.stages) == null ? void 0 : _c.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginTop: 10 }, children: svc.stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+      i > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "chev-r", size: 10, color: "var(--muted-2)" }),
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: 11, background: "var(--surface-2)", color: "var(--ink-2)", padding: "3px 8px", borderRadius: 999, border: "1px solid var(--line)" }, children: s })
     ] }, i)) })
   ] });
 }
 function Services() {
-  const [services, setServices] = (0, import_react10.useState)(null);
-  const [loading, setLoading] = (0, import_react10.useState)(true);
-  const [editing, setEditing] = (0, import_react10.useState)(null);
-  (0, import_react10.useEffect)(() => {
+  const [services, setServices] = (0, import_react11.useState)(null);
+  const [loading, setLoading] = (0, import_react11.useState)(true);
+  const [editing, setEditing] = (0, import_react11.useState)(null);
+  (0, import_react11.useEffect)(() => {
     load();
   }, []);
   function load() {
@@ -25555,30 +25672,30 @@ function Services() {
       throw err;
     }
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "scr", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "scr-body scr-pad-top", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "app-hd", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "title", style: { marginTop: 4 }, children: "Services" }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "sub", children: "Your service catalog" })
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "scr", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "scr-body scr-pad-top", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "app-hd", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "title", style: { marginTop: 4 }, children: "Services" }),
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "sub", children: "Your service catalog" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Button, { variant: "clay", size: "sm", onClick: () => setEditing({}), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "plus", size: 16 }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(Button, { variant: "clay", size: "sm", onClick: () => setEditing({}), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "plus", size: 16 }),
           "New"
         ] })
       ] }),
-      loading ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Spinner, {}) : (services || []).length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Spinner, {}) : (services || []).length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
         EmptyState,
         {
-          icon: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "briefcase", size: 40 }),
+          icon: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "briefcase", size: 40 }),
           title: "No services yet",
           body: "Add services to your catalog so dentists can find you.",
-          action: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Button, { variant: "clay", onClick: () => setEditing({}), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Icon, { name: "plus", size: 16 }),
+          action: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(Button, { variant: "clay", onClick: () => setEditing({}), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "plus", size: 16 }),
             "Add first service"
           ] })
         }
-      ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { padding: "4px 20px 32px", display: "flex", flexDirection: "column", gap: 10 }, children: (services || []).map((svc) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      ) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { padding: "4px 20px 32px", display: "flex", flexDirection: "column", gap: 10 }, children: (services || []).map((svc) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
         ServiceCard,
         {
           svc,
@@ -25590,7 +25707,7 @@ function Services() {
         svc.id
       )) })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Sheet, { open: !!editing, onClose: () => setEditing(null), title: (editing == null ? void 0 : editing.id) ? "Edit service" : "Add service", children: editing && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Sheet, { open: !!editing, onClose: () => setEditing(null), title: (editing == null ? void 0 : editing.id) ? "Edit service" : "Add service", children: editing && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
       ServiceForm,
       {
         initial: (editing == null ? void 0 : editing.id) ? editing : null,
@@ -25602,14 +25719,14 @@ function Services() {
 }
 
 // src/components/tech/Templates.jsx
-var import_react11 = __toESM(require_react());
-var import_jsx_runtime11 = __toESM(require_jsx_runtime());
+var import_react12 = __toESM(require_react());
+var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 function TemplateEditor({ service, onClose }) {
-  const [templates, setTemplates] = (0, import_react11.useState)(null);
-  const [loading, setLoading] = (0, import_react11.useState)(true);
-  const [saving, setSaving] = (0, import_react11.useState)(false);
-  const [error, setError] = (0, import_react11.useState)("");
-  (0, import_react11.useEffect)(() => {
+  const [templates, setTemplates] = (0, import_react12.useState)(null);
+  const [loading, setLoading] = (0, import_react12.useState)(true);
+  const [saving, setSaving] = (0, import_react12.useState)(false);
+  const [error, setError] = (0, import_react12.useState)("");
+  (0, import_react12.useEffect)(() => {
     if (!(service == null ? void 0 : service.id)) return;
     api.services.getTemplates(service.id).then((d) => {
       const byStage = {};
@@ -25634,16 +25751,16 @@ function TemplateEditor({ service, onClose }) {
       setSaving(false);
     }
   }
-  if (loading) return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Spinner, {});
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: [
-    error && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "Write a message template for each stage. When you advance a case to that stage, you can send this message with one tap." }),
-    ((service == null ? void 0 : service.stages) || []).map((stage, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { width: 22, height: 22, borderRadius: 11, background: i === service.stages.length - 1 ? "var(--ok)" : "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { color: "#fff", fontSize: 10, fontWeight: 700 }, children: i + 1 }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { fontWeight: 600, fontSize: 13.5 }, children: stage })
+  if (loading) return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Spinner, {});
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: [
+    error && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "Write a message template for each stage. When you advance a case to that stage, you can send this message with one tap." }),
+    ((service == null ? void 0 : service.stages) || []).map((stage, i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { width: 22, height: 22, borderRadius: 11, background: i === service.stages.length - 1 ? "var(--ok)" : "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { color: "#fff", fontSize: 10, fontWeight: 700 }, children: i + 1 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { fontWeight: 600, fontSize: 13.5 }, children: stage })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
         "textarea",
         {
           className: "field",
@@ -25658,77 +25775,77 @@ function TemplateEditor({ service, onClose }) {
         }
       )
     ] }, i)),
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Button, { variant: "ghost", block: true, onClick: onClose, children: "Cancel" }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Button, { variant: "clay", block: true, onClick: handleSave, disabled: saving, children: saving ? "Saving\u2026" : "Save templates" })
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Button, { variant: "ghost", block: true, onClick: onClose, children: "Cancel" }),
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Button, { variant: "clay", block: true, onClick: handleSave, disabled: saving, children: saving ? "Saving\u2026" : "Save templates" })
     ] })
   ] });
 }
 function Templates() {
-  const [services, setServices] = (0, import_react11.useState)(null);
-  const [loading, setLoading] = (0, import_react11.useState)(true);
-  const [editing, setEditing] = (0, import_react11.useState)(null);
-  (0, import_react11.useEffect)(() => {
+  const [services, setServices] = (0, import_react12.useState)(null);
+  const [loading, setLoading] = (0, import_react12.useState)(true);
+  const [editing, setEditing] = (0, import_react12.useState)(null);
+  (0, import_react12.useEffect)(() => {
     api.services.mine().then((d) => {
       setServices(d);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "scr", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "scr-body scr-pad-top", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "app-hd", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "title", style: { marginTop: 4 }, children: "Templates" }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "sub", children: "Stage message library" })
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "scr", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "scr-body scr-pad-top", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "app-hd", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "title", style: { marginTop: 4 }, children: "Templates" }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "sub", children: "Stage message library" })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { padding: "0 20px 12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "Write short message templates for each stage of each service. When you advance a case, you can fire the template message with one tap \u2014 no retyping." }) }),
-      loading ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Spinner, {}) : (services || []).length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { padding: "0 20px 12px" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "Write short message templates for each stage of each service. When you advance a case, you can fire the template message with one tap \u2014 no retyping." }) }),
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Spinner, {}) : (services || []).length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
         EmptyState,
         {
-          icon: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "zap", size: 40 }),
+          icon: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Icon, { name: "zap", size: 40 }),
           title: "No services yet",
           body: "Add services first, then set up templates per stage."
         }
-      ) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { padding: "4px 20px 32px", display: "flex", flexDirection: "column", gap: 10 }, children: (services || []).map((svc) => {
+      ) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { padding: "4px 20px 32px", display: "flex", flexDirection: "column", gap: 10 }, children: (services || []).map((svc) => {
         var _a;
-        return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "card", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { fontWeight: 600, fontSize: 14.5 }, children: svc.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "muted", style: { fontSize: 12.5, marginTop: 2 }, children: [
+        return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "card", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { fontWeight: 600, fontSize: 14.5 }, children: svc.title }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "muted", style: { fontSize: 12.5, marginTop: 2 }, children: [
                 (svc.stages || []).length,
                 " stages \xB7 tap to configure templates"
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(Button, { variant: "soft", size: "xs", onClick: () => setEditing(svc), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "edit", size: 13 }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(Button, { variant: "soft", size: "xs", onClick: () => setEditing(svc), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Icon, { name: "edit", size: 13 }),
               "Edit"
             ] })
           ] }),
-          ((_a = svc.stages) == null ? void 0 : _a.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginTop: 10 }, children: svc.stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 3 }, children: [
-            i > 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Icon, { name: "chev-r", size: 10, color: "var(--muted-2)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontSize: 11, background: "var(--surface-2)", color: "var(--ink-2)", padding: "2px 8px", borderRadius: 999, border: "1px solid var(--line)" }, children: s })
+          ((_a = svc.stages) == null ? void 0 : _a.length) > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginTop: 10 }, children: svc.stages.map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 3 }, children: [
+            i > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Icon, { name: "chev-r", size: 10, color: "var(--muted-2)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: 11, background: "var(--surface-2)", color: "var(--ink-2)", padding: "2px 8px", borderRadius: 999, border: "1px solid var(--line)" }, children: s })
           ] }, i)) })
         ] }, svc.id);
       }) })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Sheet, { open: !!editing, onClose: () => setEditing(null), title: `Templates \u2014 ${(editing == null ? void 0 : editing.title) || ""}`, children: editing && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TemplateEditor, { service: editing, onClose: () => setEditing(null) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Sheet, { open: !!editing, onClose: () => setEditing(null), title: `Templates \u2014 ${(editing == null ? void 0 : editing.title) || ""}`, children: editing && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(TemplateEditor, { service: editing, onClose: () => setEditing(null) }) })
   ] });
 }
 
 // src/components/tech/Archive.jsx
-var import_react12 = __toESM(require_react());
-var import_jsx_runtime12 = __toESM(require_jsx_runtime());
+var import_react13 = __toESM(require_react());
+var import_jsx_runtime13 = __toESM(require_jsx_runtime());
 function TechArchive({ onBack, onOpenCase }) {
-  const [cases, setCases] = (0, import_react12.useState)(null);
-  const [loading, setLoading] = (0, import_react12.useState)(true);
-  const [search, setSearch] = (0, import_react12.useState)("");
-  (0, import_react12.useEffect)(() => {
+  const [cases, setCases] = (0, import_react13.useState)(null);
+  const [loading, setLoading] = (0, import_react13.useState)(true);
+  const [search, setSearch] = (0, import_react13.useState)("");
+  (0, import_react13.useEffect)(() => {
     api.cases.archive().then((d) => {
       setCases(d);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
-  const grouped = import_react12.default.useMemo(() => {
+  const grouped = import_react13.default.useMemo(() => {
     var _a;
     const all = (cases || []).filter((c) => {
       var _a2, _b, _c, _d, _e;
@@ -25744,43 +25861,43 @@ function TechArchive({ onBack, onOpenCase }) {
     }
     return Object.entries(map);
   }, [cases, search]);
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "scr", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(NavBack, { title: "Archive", onBack }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "scr-body", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { padding: "14px 20px 8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { position: "relative" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Icon, { name: "search", size: 15, color: "var(--muted)" }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("input", { className: "field", style: { paddingLeft: 36 }, placeholder: "Search by ID, dentist, service\u2026", value: search, onChange: (e) => setSearch(e.target.value) })
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "scr", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(NavBack, { title: "Archive", onBack }),
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "scr-body", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { padding: "14px 20px 8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { position: "relative" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "search", size: 15, color: "var(--muted)" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("input", { className: "field", style: { paddingLeft: 36 }, placeholder: "Search by ID, dentist, service\u2026", value: search, onChange: (e) => setSearch(e.target.value) })
       ] }) }),
-      loading ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Spinner, {}) : grouped.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(EmptyState, { icon: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Icon, { name: "archive", size: 40 }), title: "No archived cases", body: "Completed cases will appear here once archived." }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { padding: "8px 20px 32px" }, children: grouped.map(([dentistName, dentistCases]) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { marginBottom: 24 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "t-eyebrow", style: { marginBottom: 10 }, children: dentistName }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: dentistCases.map((c) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(CaseCard, { c, role: "technician", onClick: () => onOpenCase(c) }, c.id)) })
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Spinner, {}) : grouped.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(EmptyState, { icon: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "archive", size: 40 }), title: "No archived cases", body: "Completed cases will appear here once archived." }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { padding: "8px 20px 32px" }, children: grouped.map(([dentistName, dentistCases]) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { marginBottom: 24 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "t-eyebrow", style: { marginBottom: 10 }, children: dentistName }),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: dentistCases.map((c) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(CaseCard, { c, role: "technician", onClick: () => onOpenCase(c) }, c.id)) })
       ] }, dentistName)) })
     ] })
   ] });
 }
 
 // src/components/shared/Chat.jsx
-var import_react13 = __toESM(require_react());
-var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+var import_react14 = __toESM(require_react());
+var import_jsx_runtime14 = __toESM(require_jsx_runtime());
 function ShadeResult({ result, onClose }) {
   if (!result) return null;
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { background: "var(--surface)", borderRadius: 16, padding: 16, border: "1px solid var(--line)", marginTop: 8 }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "t-eyebrow", children: "Shade Analysis" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { onClick: onClose, style: { border: 0, background: "transparent", cursor: "pointer", padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "x", size: 16, color: "var(--muted)" }) })
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { background: "var(--surface)", borderRadius: 16, padding: 16, border: "1px solid var(--line)", marginTop: 8 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "t-eyebrow", children: "Shade Analysis" }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { onClick: onClose, style: { border: 0, background: "transparent", cursor: "pointer", padding: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "x", size: 16, color: "var(--muted)" }) })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: 52, height: 52, borderRadius: 12, background: result.best_hex, border: "1.5px solid var(--line)", flexShrink: 0 } }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 24, fontWeight: 700, letterSpacing: "-0.02em" }, children: result.best_match }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { fontSize: 12.5, color: "var(--muted)" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { width: 52, height: 52, borderRadius: 12, background: result.best_hex, border: "1.5px solid var(--line)", flexShrink: 0 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 24, fontWeight: 700, letterSpacing: "-0.02em" }, children: result.best_match }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { fontSize: 12.5, color: "var(--muted)" }, children: [
           result.confidence,
           "% confidence",
           result._demo ? " \xB7 demo" : ""
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }, children: (result.candidates || []).map((c) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: {
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }, children: (result.candidates || []).map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: {
       display: "flex",
       alignItems: "center",
       gap: 6,
@@ -25789,31 +25906,31 @@ function ShadeResult({ result, onClose }) {
       padding: "5px 10px",
       border: c.code === result.best_match ? "1.5px solid var(--clay)" : "1px solid var(--line)"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { width: 12, height: 12, borderRadius: 3, background: c.hex } }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: 12.5, fontWeight: 600 }, children: c.code }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontSize: 11, color: "var(--muted)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { width: 12, height: 12, borderRadius: 3, background: c.hex } }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 12.5, fontWeight: 600 }, children: c.code }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("span", { style: { fontSize: 11, color: "var(--muted)" }, children: [
         c.match,
         "%"
       ] })
     ] }, c.code)) }),
-    result.reading && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 13, color: "var(--ink-2)", fontStyle: "italic", lineHeight: 1.5, borderTop: "1px solid var(--line)", paddingTop: 10 }, children: result.reading })
+    result.reading && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 13, color: "var(--ink-2)", fontStyle: "italic", lineHeight: 1.5, borderTop: "1px solid var(--line)", paddingTop: 10 }, children: result.reading })
   ] });
 }
 function Bubble({ msg, isMe, onAnalyzeShade }) {
   var _a, _b, _c, _d, _e;
-  const [shadeResult, setShadeResult] = (0, import_react13.useState)(((_a = msg.metadata) == null ? void 0 : _a.shade_result) || null);
-  const [analyzing, setAnalyzing] = (0, import_react13.useState)(false);
+  const [shadeResult, setShadeResult] = (0, import_react14.useState)(((_a = msg.metadata) == null ? void 0 : _a.shade_result) || null);
+  const [analyzing, setAnalyzing] = (0, import_react14.useState)(false);
   if (msg.kind === "system") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { alignSelf: "center", fontSize: 12, color: "var(--muted)", padding: "4px 12px", background: "var(--surface-2)", borderRadius: 999, margin: "4px 0" }, children: msg.body });
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { alignSelf: "center", fontSize: 12, color: "var(--muted)", padding: "4px 12px", background: "var(--surface-2)", borderRadius: 999, margin: "4px 0" }, children: msg.body });
   }
   if (msg.kind === "payment") {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { alignSelf: isMe ? "flex-end" : "flex-start", maxWidth: "80%" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { background: isMe ? "var(--ink)" : "var(--surface)", border: isMe ? "none" : "1px solid var(--line)", borderRadius: 16, padding: "12px 14px", borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "check-c", size: 16, color: isMe ? "var(--bg)" : "var(--ok)" }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: 13.5, fontWeight: 600, color: isMe ? "var(--bg)" : "var(--ink)" }, children: "Payment Screenshot" })
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { alignSelf: isMe ? "flex-end" : "flex-start", maxWidth: "80%" }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { background: isMe ? "var(--ink)" : "var(--surface)", border: isMe ? "none" : "1px solid var(--line)", borderRadius: 16, padding: "12px 14px", borderBottomRightRadius: isMe ? 4 : 16, borderBottomLeftRadius: isMe ? 16 : 4 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "check-c", size: 16, color: isMe ? "var(--bg)" : "var(--ok)" }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 13.5, fontWeight: 600, color: isMe ? "var(--bg)" : "var(--ink)" }, children: "Payment Screenshot" })
       ] }),
-      ((_b = msg.metadata) == null ? void 0 : _b.url) && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("img", { src: msg.metadata.url, alt: "payment", style: { width: "100%", borderRadius: 10, marginBottom: 6 } }),
-      msg.body && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 13, color: isMe ? "rgba(255,255,255,0.8)" : "var(--muted)" }, children: msg.body })
+      ((_b = msg.metadata) == null ? void 0 : _b.url) && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("img", { src: msg.metadata.url, alt: "payment", style: { width: "100%", borderRadius: 10, marginBottom: 6 } }),
+      msg.body && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 13, color: isMe ? "rgba(255,255,255,0.8)" : "var(--muted)" }, children: msg.body })
     ] }) });
   }
   const isImage = msg.kind === "image";
@@ -25830,11 +25947,11 @@ function Bubble({ msg, isMe, onAnalyzeShade }) {
       setAnalyzing(false);
     }
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { alignSelf: isMe ? "flex-end" : "flex-start", maxWidth: "78%", display: "flex", flexDirection: "column", gap: 4 }, children: [
-    !isMe && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 11, color: "var(--muted)", marginLeft: 4 }, children: (_e = (_d = msg.sender) == null ? void 0 : _d.full_name) == null ? void 0 : _e.split(" ")[0] }),
-    hasImage ? /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "bubble-img", style: { alignSelf: isMe ? "flex-end" : "flex-start" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("img", { src: msg.metadata.url, alt: msg.body || "attachment", style: { borderRadius: 14, maxWidth: "100%" } }),
-      !shadeResult && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { alignSelf: isMe ? "flex-end" : "flex-start", maxWidth: "78%", display: "flex", flexDirection: "column", gap: 4 }, children: [
+    !isMe && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 11, color: "var(--muted)", marginLeft: 4 }, children: (_e = (_d = msg.sender) == null ? void 0 : _d.full_name) == null ? void 0 : _e.split(" ")[0] }),
+    hasImage ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "bubble-img", style: { alignSelf: isMe ? "flex-end" : "flex-start" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("img", { src: msg.metadata.url, alt: msg.body || "attachment", style: { borderRadius: 14, maxWidth: "100%" } }),
+      !shadeResult && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
         "button",
         {
           onClick: handleAnalyze,
@@ -25854,21 +25971,21 @@ function Bubble({ msg, isMe, onAnalyzeShade }) {
             color: "var(--clay-ink)"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "eye", size: 13, color: "var(--clay-ink)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "eye", size: 13, color: "var(--clay-ink)" }),
             analyzing ? "Analyzing\u2026" : "Extract shade"
           ]
         }
       ),
-      shadeResult && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ShadeResult, { result: shadeResult, onClose: () => setShadeResult(null) })
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: `bubble ${isMe ? "bubble-me" : "bubble-them"}`, children: msg.body }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 10.5, color: "var(--muted-2)", alignSelf: isMe ? "flex-end" : "flex-start", marginTop: -2 }, children: new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) })
+      shadeResult && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ShadeResult, { result: shadeResult, onClose: () => setShadeResult(null) })
+    ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: `bubble ${isMe ? "bubble-me" : "bubble-them"}`, children: msg.body }),
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 10.5, color: "var(--muted-2)", alignSelf: isMe ? "flex-end" : "flex-start", marginTop: -2 }, children: new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) })
   ] });
 }
 function PaymentSheet({ caseId, open, onClose, onSent }) {
-  const [file, setFile] = (0, import_react13.useState)(null);
-  const [note, setNote] = (0, import_react13.useState)("");
-  const [loading, setLoading] = (0, import_react13.useState)(false);
-  const [error, setError] = (0, import_react13.useState)("");
+  const [file, setFile] = (0, import_react14.useState)(null);
+  const [note, setNote] = (0, import_react14.useState)("");
+  const [loading, setLoading] = (0, import_react14.useState)(false);
+  const [error, setError] = (0, import_react14.useState)("");
   async function handleSend() {
     if (!file) {
       setError("Please choose a file");
@@ -25891,10 +26008,10 @@ function PaymentSheet({ caseId, open, onClose, onSent }) {
       setLoading(false);
     }
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Sheet, { open, onClose, title: "Upload payment proof", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
-    error && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "Upload a screenshot of your bank transfer, UPI, or cheque. The lab will confirm once verified." }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("label", { style: {
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Sheet, { open, onClose, title: "Upload payment proof", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
+    error && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "Upload a screenshot of your bank transfer, UPI, or cheque. The lab will confirm once verified." }),
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { style: {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -25905,25 +26022,25 @@ function PaymentSheet({ caseId, open, onClose, onSent }) {
       cursor: "pointer",
       color: "var(--muted)"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "image", size: 28, color: "var(--muted)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: 13.5 }, children: file ? file.name : "Tap to choose image" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("input", { type: "file", accept: "image/*", style: { display: "none" }, onChange: (e) => setFile(e.target.files[0]) })
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "image", size: 28, color: "var(--muted)" }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 13.5 }, children: file ? file.name : "Tap to choose image" }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { type: "file", accept: "image/*", style: { display: "none" }, onChange: (e) => setFile(e.target.files[0]) })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("label", { className: "t-xs muted", style: { marginLeft: 2, display: "block", marginBottom: 6 }, children: "Note (optional)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("input", { className: "field", placeholder: "e.g. UPI transfer done, ref #12345", value: note, onChange: (e) => setNote(e.target.value) })
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("label", { className: "t-xs muted", style: { marginLeft: 2, display: "block", marginBottom: 6 }, children: "Note (optional)" }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { className: "field", placeholder: "e.g. UPI transfer done, ref #12345", value: note, onChange: (e) => setNote(e.target.value) })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Button, { variant: "clay", block: true, onClick: handleSend, disabled: loading || !file, children: loading ? "Sending\u2026" : "Send payment proof" })
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Button, { variant: "clay", block: true, onClick: handleSend, disabled: loading || !file, children: loading ? "Sending\u2026" : "Send payment proof" })
   ] }) });
 }
 function StageAdvanceSheet({ caseData, open, onClose, onAdvanced }) {
   var _a, _b;
-  const [template, setTemplate] = (0, import_react13.useState)("");
-  const [loading, setLoading] = (0, import_react13.useState)(false);
-  const [templates, setTemplates] = (0, import_react13.useState)(null);
+  const [template, setTemplate] = (0, import_react14.useState)("");
+  const [loading, setLoading] = (0, import_react14.useState)(false);
+  const [templates, setTemplates] = (0, import_react14.useState)(null);
   const stages = ((_a = caseData == null ? void 0 : caseData.service) == null ? void 0 : _a.stages) || [];
   const nextStage = ((caseData == null ? void 0 : caseData.stage) || 0) + 1;
-  (0, import_react13.useEffect)(() => {
+  (0, import_react14.useEffect)(() => {
     var _a2;
     if (!open || !((_a2 = caseData == null ? void 0 : caseData.service) == null ? void 0 : _a2.id)) return;
     api.services.getTemplates(caseData.service.id).then((d) => {
@@ -25949,14 +26066,14 @@ function StageAdvanceSheet({ caseData, open, onClose, onAdvanced }) {
     }
   }
   const nextStageName = stages[nextStage] || "Complete";
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Sheet, { open, onClose, title: `Move to "${nextStageName}"`, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "This will update the case status. The dentist will be notified." }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("label", { className: "t-xs muted", style: { marginLeft: 2, display: "block", marginBottom: 6 }, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Sheet, { open, onClose, title: `Move to "${nextStageName}"`, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 13.5, color: "var(--ink-3)", lineHeight: 1.5 }, children: "This will update the case status. The dentist will be notified." }),
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { className: "t-xs muted", style: { marginLeft: 2, display: "block", marginBottom: 6 }, children: [
         "Message to dentist ",
         template ? "(from template)" : "(optional)"
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "textarea",
         {
           className: "field",
@@ -25967,26 +26084,26 @@ function StageAdvanceSheet({ caseData, open, onClose, onAdvanced }) {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Button, { variant: "ghost", block: true, onClick: onClose, children: "Cancel" }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Button, { variant: "clay", block: true, onClick: handleAdvance, disabled: loading, children: loading ? "Updating\u2026" : `Move to ${nextStageName}` })
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Button, { variant: "ghost", block: true, onClick: onClose, children: "Cancel" }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Button, { variant: "clay", block: true, onClick: handleAdvance, disabled: loading, children: loading ? "Updating\u2026" : `Move to ${nextStageName}` })
     ] })
   ] }) });
 }
 function Chat({ initialCase, onBack, role }) {
-  var _a, _b, _c, _d;
+  var _a, _b, _c, _d, _e, _f, _g, _h;
   const { profile } = useAuth();
-  const [caseData, setCaseData] = (0, import_react13.useState)(initialCase);
-  const [messages, setMessages] = (0, import_react13.useState)(null);
-  const [loading, setLoading] = (0, import_react13.useState)(true);
-  const [text, setText] = (0, import_react13.useState)("");
-  const [sending, setSending] = (0, import_react13.useState)(false);
-  const [showPayment, setShowPayment] = (0, import_react13.useState)(false);
-  const [showAdvance, setShowAdvance] = (0, import_react13.useState)(false);
-  const [imgFile, setImgFile] = (0, import_react13.useState)(null);
-  const bottomRef = (0, import_react13.useRef)(null);
-  const fileRef = (0, import_react13.useRef)(null);
-  (0, import_react13.useEffect)(() => {
+  const [caseData, setCaseData] = (0, import_react14.useState)(initialCase);
+  const [messages, setMessages] = (0, import_react14.useState)(null);
+  const [loading, setLoading] = (0, import_react14.useState)(true);
+  const [text, setText] = (0, import_react14.useState)("");
+  const [sending, setSending] = (0, import_react14.useState)(false);
+  const [showPayment, setShowPayment] = (0, import_react14.useState)(false);
+  const [showAdvance, setShowAdvance] = (0, import_react14.useState)(false);
+  const [imgFile, setImgFile] = (0, import_react14.useState)(null);
+  const bottomRef = (0, import_react14.useRef)(null);
+  const fileRef = (0, import_react14.useRef)(null);
+  (0, import_react14.useEffect)(() => {
     Promise.all([
       api.cases.get(initialCase.id),
       api.messages.list(initialCase.id)
@@ -26000,7 +26117,7 @@ function Chat({ initialCase, onBack, role }) {
     });
     return unsub;
   }, [initialCase.id]);
-  (0, import_react13.useEffect)(() => {
+  (0, import_react14.useEffect)(() => {
     var _a2;
     (_a2 = bottomRef.current) == null ? void 0 : _a2.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -26062,36 +26179,59 @@ function Chat({ initialCase, onBack, role }) {
       console.error(err);
     }
   }
-  const partner = isTech ? ((_b = caseData == null ? void 0 : caseData.dentist) == null ? void 0 : _b.full_name) || "Dentist" : ((_c = caseData == null ? void 0 : caseData.lab) == null ? void 0 : _c.name) || "Lab";
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "scr", style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(NavBack, { title: partner, onBack, right: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 6 }, children: [
-      waitingPay && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("button", { onClick: handleConfirmPayment, className: "btn btn-xs", style: { background: "var(--ok)", border: 0, color: "#fff", height: 30 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "check", size: 13 }),
+  const partner = isTech ? ((_b = caseData == null ? void 0 : caseData.dentist) == null ? void 0 : _b.full_name) || (caseData == null ? void 0 : caseData.doctor_name) || "Dentist" : ((_c = caseData == null ? void 0 : caseData.lab) == null ? void 0 : _c.name) || "Lab";
+  const doctorPhone = ((caseData == null ? void 0 : caseData.doctor_phone) || ((_d = caseData == null ? void 0 : caseData.dentist) == null ? void 0 : _d.phone) || "").replace(/\D/g, "");
+  const waText = encodeURIComponent(
+    `Hi, update on case ${caseData == null ? void 0 : caseData.id} (${((_e = caseData == null ? void 0 : caseData.service) == null ? void 0 : _e.title) || ""}): currently at stage "${((_g = (_f = caseData == null ? void 0 : caseData.service) == null ? void 0 : _f.stages) == null ? void 0 : _g[caseData == null ? void 0 : caseData.stage]) || "In progress"}".`
+  );
+  const waHref = doctorPhone ? `https://wa.me/91${doctorPhone}?text=${waText}` : null;
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "scr", style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(NavBack, { title: partner, onBack, right: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 6, alignItems: "center" }, children: [
+      waHref && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+        "a",
+        {
+          href: waHref,
+          target: "_blank",
+          rel: "noreferrer",
+          className: "btn btn-xs",
+          style: { background: "#25D366", border: 0, color: "#fff", height: 30, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5, padding: "0 10px", borderRadius: 8, fontSize: 12.5, fontWeight: 600 },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "send", size: 12, color: "#fff" }),
+            "WA"
+          ]
+        }
+      ),
+      waitingPay && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("button", { onClick: handleConfirmPayment, className: "btn btn-xs", style: { background: "var(--ok)", border: 0, color: "#fff", height: 30 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "check", size: 13 }),
         "Confirm pay"
       ] }),
-      isLastStage && (caseData == null ? void 0 : caseData.payment_status) === "confirmed" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { onClick: handleArchive, className: "btn btn-xs btn-soft", children: "Archive" })
+      isLastStage && (caseData == null ? void 0 : caseData.payment_status) === "confirmed" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { onClick: handleArchive, className: "btn btn-xs btn-soft", children: "Archive" })
     ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { borderBottom: "1px solid var(--line)" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { padding: "10px 16px 0", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { fontWeight: 600, fontSize: 13.5 }, children: (_d = caseData == null ? void 0 : caseData.service) == null ? void 0 : _d.title }),
-          /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { fontSize: 12, color: "var(--muted)", marginTop: 2 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { borderBottom: "1px solid var(--line)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { padding: "10px 16px 0", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontWeight: 600, fontSize: 13.5 }, children: (_h = caseData == null ? void 0 : caseData.service) == null ? void 0 : _h.title }),
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { fontSize: 12, color: "var(--muted)", marginTop: 2 }, children: [
             caseData == null ? void 0 : caseData.id,
             (caseData == null ? void 0 : caseData.patient_ref) ? ` \xB7 ${caseData.patient_ref}` : ""
+          ] }),
+          (caseData == null ? void 0 : caseData.doctor_name) && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { fontSize: 12, color: "var(--muted)", marginTop: 1 }, children: [
+            caseData.doctor_name,
+            caseData.clinic_name ? ` \xB7 ${caseData.clinic_name}` : ""
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
-          (caseData == null ? void 0 : caseData.payment_status) !== "pending" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Pill, { tone: (caseData == null ? void 0 : caseData.payment_status) === "confirmed" ? "ok" : "warn", children: (caseData == null ? void 0 : caseData.payment_status) === "confirmed" ? "Paid" : "Pay received" }),
-          canAdvance && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("button", { className: "btn btn-xs btn-clay", onClick: () => setShowAdvance(true), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "chev-r", size: 13 }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
+          (caseData == null ? void 0 : caseData.payment_status) !== "pending" && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Pill, { tone: (caseData == null ? void 0 : caseData.payment_status) === "confirmed" ? "ok" : "warn", children: (caseData == null ? void 0 : caseData.payment_status) === "confirmed" ? "Paid" : "Pay received" }),
+          canAdvance && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("button", { className: "btn btn-xs btn-clay", onClick: () => setShowAdvance(true), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "chev-r", size: 13 }),
             "Advance"
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(StageBar, { stages, current: currentStage })
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(StageBar, { stages, current: currentStage })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }, children: [
-      loading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Spinner, {}) : (messages || []).map((msg) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { flex: 1, overflowY: "auto", padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }, children: [
+      loading ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Spinner, {}) : (messages || []).map((msg) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         Bubble,
         {
           msg,
@@ -26099,10 +26239,10 @@ function Chat({ initialCase, onBack, role }) {
         },
         msg.id
       )),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { ref: bottomRef })
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { ref: bottomRef })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "composer", style: { paddingBottom: "max(env(safe-area-inset-bottom), 10px)" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "composer", style: { paddingBottom: "max(env(safe-area-inset-bottom), 10px)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "input",
         {
           ref: fileRef,
@@ -26112,12 +26252,12 @@ function Chat({ initialCase, onBack, role }) {
           onChange: (e) => e.target.files[0] && sendImage(e.target.files[0])
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { className: "btn-icon", onClick: () => {
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { className: "btn-icon", onClick: () => {
         var _a2;
         return (_a2 = fileRef.current) == null ? void 0 : _a2.click();
-      }, title: "Attach image", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "paperclip", size: 18 }) }),
-      !isTech && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { className: "btn-icon", onClick: () => setShowPayment(true), title: "Send payment proof", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "check-c", size: 18 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      }, title: "Attach image", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "paperclip", size: 18 }) }),
+      !isTech && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { className: "btn-icon", onClick: () => setShowPayment(true), title: "Send payment proof", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "check-c", size: 18 }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "input",
         {
           className: "input",
@@ -26127,7 +26267,7 @@ function Chat({ initialCase, onBack, role }) {
           onKeyDown: (e) => e.key === "Enter" && !e.shiftKey && sendText(e)
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "button",
         {
           onClick: sendText,
@@ -26145,11 +26285,11 @@ function Chat({ initialCase, onBack, role }) {
             flexShrink: 0,
             transition: "background 0.15s"
           },
-          children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Icon, { name: "send", size: 16, color: text.trim() ? "#fff" : "var(--muted)" })
+          children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "send", size: 16, color: text.trim() ? "#fff" : "var(--muted)" })
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       PaymentSheet,
       {
         caseId: caseData == null ? void 0 : caseData.id,
@@ -26163,7 +26303,7 @@ function Chat({ initialCase, onBack, role }) {
         }
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
       StageAdvanceSheet,
       {
         caseData,
@@ -26176,16 +26316,16 @@ function Chat({ initialCase, onBack, role }) {
 }
 
 // src/components/shared/Profile.jsx
-var import_react14 = __toESM(require_react());
-var import_jsx_runtime14 = __toESM(require_jsx_runtime());
+var import_react15 = __toESM(require_react());
+var import_jsx_runtime15 = __toESM(require_jsx_runtime());
 function Profile() {
   const { profile, signOut } = useAuth();
-  const [editing, setEditing] = (0, import_react14.useState)(false);
-  const [name, setName] = (0, import_react14.useState)((profile == null ? void 0 : profile.full_name) || "");
-  const [phone, setPhone] = (0, import_react14.useState)((profile == null ? void 0 : profile.phone) || "");
-  const [city, setCity] = (0, import_react14.useState)((profile == null ? void 0 : profile.city) || "");
-  const [loading, setLoading] = (0, import_react14.useState)(false);
-  const [error, setError] = (0, import_react14.useState)("");
+  const [editing, setEditing] = (0, import_react15.useState)(false);
+  const [name, setName] = (0, import_react15.useState)((profile == null ? void 0 : profile.full_name) || "");
+  const [phone, setPhone] = (0, import_react15.useState)((profile == null ? void 0 : profile.phone) || "");
+  const [city, setCity] = (0, import_react15.useState)((profile == null ? void 0 : profile.city) || "");
+  const [loading, setLoading] = (0, import_react15.useState)(false);
+  const [error, setError] = (0, import_react15.useState)("");
   async function handleSave() {
     setLoading(true);
     setError("");
@@ -26198,58 +26338,58 @@ function Profile() {
       setLoading(false);
     }
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "scr", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "scr-body scr-pad-top", style: { padding: "60px 24px 40px", display: "flex", flexDirection: "column", gap: 24 }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "24px 0", textAlign: "center" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Avatar, { name: (profile == null ? void 0 : profile.full_name) || "?", size: 72, tone: (profile == null ? void 0 : profile.role) === "dentist" ? "info" : "clay" }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 20, fontWeight: 700, letterSpacing: "-0.02em" }, children: profile == null ? void 0 : profile.full_name }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 13, color: "var(--muted)", marginTop: 4, textTransform: "capitalize" }, children: (profile == null ? void 0 : profile.role) === "technician" ? "Dental Technician" : "Dentist" })
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "scr", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "scr-body scr-pad-top", style: { padding: "60px 24px 40px", display: "flex", flexDirection: "column", gap: 24 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "24px 0", textAlign: "center" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Avatar, { name: (profile == null ? void 0 : profile.full_name) || "?", size: 72, tone: (profile == null ? void 0 : profile.role) === "dentist" ? "info" : "clay" }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { fontSize: 20, fontWeight: 700, letterSpacing: "-0.02em" }, children: profile == null ? void 0 : profile.full_name }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { fontSize: 13, color: "var(--muted)", marginTop: 4, textTransform: "capitalize" }, children: (profile == null ? void 0 : profile.role) === "technician" ? "Dental Technician" : "Dentist" })
       ] })
     ] }),
-    !editing ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "card", style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
+    !editing ? /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "card", style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
       [
         { icon: "user", label: "Name", value: profile == null ? void 0 : profile.full_name },
         { icon: "map-pin", label: "City", value: (profile == null ? void 0 : profile.city) || "\u2014" },
         { icon: "briefcase", label: "Phone", value: (profile == null ? void 0 : profile.phone) || "\u2014" }
-      ].map(({ icon, label, value }) => /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 12, alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { width: 34, height: 34, borderRadius: 9, background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: icon, size: 16, color: "var(--muted)" }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 }, children: label }),
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: { fontSize: 14.5, fontWeight: 500 }, children: value })
+      ].map(({ icon, label, value }) => /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", gap: 12, alignItems: "center" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { width: 34, height: 34, borderRadius: 9, background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Icon, { name: icon, size: 16, color: "var(--muted)" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 }, children: label }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { fontSize: 14.5, fontWeight: 500 }, children: value })
         ] })
       ] }, label)),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Button, { variant: "soft", onClick: () => setEditing(true), style: { marginTop: 4 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "edit", size: 16 }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Button, { variant: "soft", onClick: () => setEditing(true), style: { marginTop: 4 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Icon, { name: "edit", size: 16 }),
         "Edit profile"
       ] })
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
-      error && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Field, { label: "Name", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { className: "field", value: name, onChange: (e) => setName(e.target.value) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Field, { label: "Phone", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { className: "field", type: "tel", value: phone, onChange: (e) => setPhone(e.target.value) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Field, { label: "City", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { className: "field", value: city, onChange: (e) => setCity(e.target.value) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Button, { variant: "ghost", block: true, onClick: () => setEditing(false), children: "Cancel" }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Button, { variant: "clay", block: true, onClick: handleSave, disabled: loading, children: loading ? "Saving\u2026" : "Save" })
+    ] }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
+      error && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ErrorBanner, { message: error, onDismiss: () => setError("") }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Field, { label: "Name", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("input", { className: "field", value: name, onChange: (e) => setName(e.target.value) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Field, { label: "Phone", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("input", { className: "field", type: "tel", value: phone, onChange: (e) => setPhone(e.target.value) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Field, { label: "City", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("input", { className: "field", value: city, onChange: (e) => setCity(e.target.value) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Button, { variant: "ghost", block: true, onClick: () => setEditing(false), children: "Cancel" }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Button, { variant: "clay", block: true, onClick: handleSave, disabled: loading, children: loading ? "Saving\u2026" : "Save" })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, paddingTop: 16 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Logo, { size: 22 }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 13.5, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--ink-2)" }, children: "Chairside" }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { color: "var(--muted-2)" }, children: "\xB7" }),
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 12.5, color: "var(--muted)" }, children: "v2.0" })
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, paddingTop: 16 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Logo, { size: 22 }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontSize: 13.5, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--ink-2)" }, children: "Chairside" }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { color: "var(--muted-2)" }, children: "\xB7" }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { fontSize: 12.5, color: "var(--muted)" }, children: "v2.0" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Button, { variant: "ghost", onClick: signOut, style: { color: "var(--danger)" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Icon, { name: "log-out", size: 16, color: "var(--danger)" }),
+    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Button, { variant: "ghost", onClick: signOut, style: { color: "var(--danger)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Icon, { name: "log-out", size: 16, color: "var(--danger)" }),
       "Sign out"
     ] })
   ] }) });
 }
 
 // src/app.jsx
-var import_jsx_runtime15 = __toESM(require_jsx_runtime());
+var import_jsx_runtime16 = __toESM(require_jsx_runtime());
 function useIsDesktop() {
-  const [v, set] = (0, import_react15.useState)(() => window.matchMedia("(min-width: 900px)").matches);
-  (0, import_react15.useEffect)(() => {
+  const [v, set] = (0, import_react16.useState)(() => window.matchMedia("(min-width: 900px)").matches);
+  (0, import_react16.useEffect)(() => {
     const mq = window.matchMedia("(min-width: 900px)");
     const h = (e) => set(e.matches);
     mq.addEventListener("change", h);
@@ -26258,46 +26398,50 @@ function useIsDesktop() {
   return v;
 }
 function DentistApp() {
-  const [tab, setTab] = (0, import_react15.useState)("home");
-  const [stack, setStack] = (0, import_react15.useState)([]);
+  const [tab, setTab] = (0, import_react16.useState)("home");
+  const [stack, setStack] = (0, import_react16.useState)([]);
   const push = (screen, props = {}) => setStack((s) => [...s, { screen, props }]);
   const pop = () => setStack((s) => s.slice(0, -1));
   const current = stack[stack.length - 1];
   if (current) {
     const { screen, props } = current;
-    if (screen === "chat") return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chat, { initialCase: props.case, onBack: pop, role: "dentist" });
-    if (screen === "lab") return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(BrowseLabs, { onBack: pop, onSelectLab: (lab) => push("new-case", { lab }) });
-    if (screen === "new-case") return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NewCase, { lab: props.lab, onBack: pop, onCreated: (c) => {
+    if (screen === "chat") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Chat, { initialCase: props.case, onBack: pop, role: "dentist" });
+    if (screen === "lab") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(BrowseLabs, { onBack: pop, onSelectLab: (lab) => push("new-case", { lab }) });
+    if (screen === "new-case") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(NewCase, { lab: props.lab, onBack: pop, onCreated: (c) => {
       pop();
       pop();
       push("chat", { case: c });
     } });
-    if (screen === "archive") return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(DentistArchive, { onBack: pop, onOpenCase: (c) => push("chat", { case: c }) });
+    if (screen === "archive") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(DentistArchive, { onBack: pop, onOpenCase: (c) => push("chat", { case: c }) });
   }
   const tabs = [
     { id: "home", label: "Cases", icon: "inbox" },
     { id: "browse", label: "Browse", icon: "search" },
     { id: "profile", label: "Profile", icon: "user" }
   ];
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: [
-      tab === "home" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(DentistDashboard, { onOpenCase: (c) => push("chat", { case: c }), onBrowse: () => push("lab"), onOpenArchive: () => push("archive") }),
-      tab === "browse" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(BrowseLabs, { onBack: () => setTab("home"), onSelectLab: (lab) => push("new-case", { lab }) }),
-      tab === "profile" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Profile, {})
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: [
+      tab === "home" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(DentistDashboard, { onOpenCase: (c) => push("chat", { case: c }), onBrowse: () => push("lab"), onOpenArchive: () => push("archive") }),
+      tab === "browse" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(BrowseLabs, { onBack: () => setTab("home"), onSelectLab: (lab) => push("new-case", { lab }) }),
+      tab === "profile" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Profile, {})
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TabBar, { tabs, active: tab, onChange: setTab })
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TabBar, { tabs, active: tab, onChange: setTab })
   ] });
 }
 function TechApp() {
-  const [tab, setTab] = (0, import_react15.useState)("home");
-  const [stack, setStack] = (0, import_react15.useState)([]);
+  const [tab, setTab] = (0, import_react16.useState)("home");
+  const [stack, setStack] = (0, import_react16.useState)([]);
   const push = (screen, props = {}) => setStack((s) => [...s, { screen, props }]);
   const pop = () => setStack((s) => s.slice(0, -1));
   const current = stack[stack.length - 1];
   if (current) {
     const { screen, props } = current;
-    if (screen === "chat") return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Chat, { initialCase: props.case, onBack: pop, role: "tech" });
-    if (screen === "archive") return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TechArchive, { onBack: pop, onOpenCase: (c) => push("chat", { case: c }) });
+    if (screen === "chat") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Chat, { initialCase: props.case, onBack: pop, role: "tech" });
+    if (screen === "archive") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TechArchive, { onBack: pop, onOpenCase: (c) => push("chat", { case: c }) });
+    if (screen === "new-case") return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TechNewCase, { onBack: pop, onCreated: (c) => {
+      pop();
+      push("chat", { case: c });
+    } });
   }
   const tabs = [
     { id: "home", label: "Cases", icon: "inbox" },
@@ -26305,40 +26449,40 @@ function TechApp() {
     { id: "templates", label: "Templates", icon: "zap" },
     { id: "profile", label: "Profile", icon: "user" }
   ];
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: [
-      tab === "home" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TechDashboard, { onOpenCase: (c) => push("chat", { case: c }), onOpenCatalog: () => setTab("catalog"), onOpenArchive: () => push("archive") }),
-      tab === "catalog" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Services, {}),
-      tab === "templates" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Templates, {}),
-      tab === "profile" && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Profile, {})
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { flex: 1, overflow: "hidden", position: "relative" }, children: [
+      tab === "home" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TechDashboard, { onOpenCase: (c) => push("chat", { case: c }), onOpenCatalog: () => setTab("catalog"), onOpenArchive: () => push("archive"), onNewCase: () => push("new-case") }),
+      tab === "catalog" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Services, {}),
+      tab === "templates" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Templates, {}),
+      tab === "profile" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Profile, {})
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TabBar, { tabs, active: tab, onChange: setTab })
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TabBar, { tabs, active: tab, onChange: setTab })
   ] });
 }
 function DesktopLayout({ children }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { position: "fixed", inset: 0, background: "var(--bg)", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { width: "100%", maxWidth: 480, height: "100%", display: "flex", flexDirection: "column", boxShadow: "0 0 0 1px var(--line), 0 0 60px rgba(28,22,18,0.07)", background: "var(--bg)", overflow: "hidden" }, children }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { position: "fixed", inset: 0, background: "var(--bg)", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { width: "100%", maxWidth: 480, height: "100%", display: "flex", flexDirection: "column", boxShadow: "0 0 0 1px var(--line), 0 0 60px rgba(28,22,18,0.07)", background: "var(--bg)", overflow: "hidden" }, children }) });
 }
 function MobileLayout({ children }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { position: "fixed", inset: 0, background: "var(--bg)", overflow: "hidden", display: "flex", flexDirection: "column" }, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { position: "fixed", inset: 0, background: "var(--bg)", overflow: "hidden", display: "flex", flexDirection: "column" }, children });
 }
 function Root() {
   const { profile, loading } = useAuth();
   const isDesktop = useIsDesktop();
   const Wrapper = isDesktop ? DesktopLayout : MobileLayout;
   if (loading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Wrapper, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Logo, { size: 40 }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "serif", style: { fontSize: 28, letterSpacing: "-0.02em" }, children: "Chairside" }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { marginTop: 8 }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Spinner, {}) })
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Wrapper, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Logo, { size: 40 }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "serif", style: { fontSize: 28, letterSpacing: "-0.02em" }, children: "Chairside" }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { marginTop: 8 }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Spinner, {}) })
     ] }) });
   }
   if (!profile) {
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Wrapper, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Auth, {}) });
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Wrapper, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Auth, {}) });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Wrapper, { children: profile.role === "technician" ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TechApp, {}) : /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(DentistApp, {}) });
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Wrapper, { children: profile.role === "technician" ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TechApp, {}) : /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(DentistApp, {}) });
 }
 import_client.default.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Root, {}) })
+  /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Root, {}) })
 );
 /*! Bundled license information:
 
