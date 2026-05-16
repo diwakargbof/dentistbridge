@@ -1,13 +1,15 @@
 {
-  "buildCommand": "node scripts/build.js",
-  "outputDirectory": ".",
-  "framework": null,
-  "headers": [
-    {
-      "source": "/(.*)\\.jsx",
-      "headers": [
-        { "key": "Content-Type", "value": "application/javascript" }
-      ]
-    }
-  ]
+  "version": 2,
+  "buildCommand": "npm run build",
+  "builds": [
+    { "src": "server/index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)",     "dest": "server/index.js" },
+    { "src": "/config.js",    "dest": "server/index.js" },
+    { "src": "/(.*)",         "dest": "server/index.js" }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

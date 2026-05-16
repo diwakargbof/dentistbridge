@@ -4,6 +4,7 @@
 
 # Generated — rebuilt on every deploy
 config.js
+dist/
 
 # Node
 node_modules/

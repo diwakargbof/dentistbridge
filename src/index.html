@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3efe8" />
+  <meta name="description" content="Chairside — Between the chair and the bench. Case-by-case workflow tracking for dental labs and dentists." />
+  <title>Chairside</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/styles/tokens.css" />
+
+  <!-- Runtime config injected by Express (Supabase keys) -->
+  <script src="/config.js" onerror="window.CHAIRSIDE_CONFIG={}"></script>
+
+  <!-- Supabase JS (UMD) for Realtime subscriptions -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="/bundle.js"></script>
+</body>
+</html>
