@@ -15,7 +15,11 @@ async function fetchProfile(id) {
     .select('*')
     .eq('id', id)
     .single();
-  return error ? null : data;
+  if (error) {
+    console.error('[fetchProfile] Supabase error:', error.message, '| id:', id);
+    return { _error: error.message };
+  }
+  return data;
 }
 
 // POST /api/auth/phone-login
@@ -25,7 +29,8 @@ router.post('/phone-login', async (req, res) => {
   if (!id) return res.status(401).json({ error: 'Phone number not recognised.' });
 
   const profile = await fetchProfile(id);
-  if (!profile) return res.status(404).json({ error: 'Profile not found in database. Check PROFILE_A_ID / PROFILE_B_ID.' });
+  if (!profile) return res.status(404).json({ error: 'Profile row not found. Check PROFILE_A_ID / PROFILE_B_ID match real UUIDs in the profiles table.' });
+  if (profile._error) return res.status(500).json({ error: `Supabase error: ${profile._error}. Check SUPABASE_URL and SUPABASE_SERVICE_KEY env vars.` });
 
   res.json({ profile, token: id });
 });
