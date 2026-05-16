@@ -1,7 +1,7 @@
 // screens-dentist.jsx — Dentist side
 // All data from Supabase. Real case creation.
 
-function DentistHome({ userId, userProfile, onOpenCase, onBrowse }) {
+function DentistHome({ userId, userProfile, onOpenCase, onBrowse, onOpenArchive }) {
   const { useCases } = window.CHAIRSIDE_SUPABASE;
   const cases = useCases('dentist', userId);
 
@@ -46,7 +46,7 @@ function DentistHome({ userId, userProfile, onOpenCase, onBrowse }) {
         {/* Active cases */}
         <div className="sub-hd">
           <div className="t-eyebrow">Active · {cases === null ? '…' : active.length}</div>
-          <button className="btn btn-xs btn-soft">All cases</button>
+          <button className="btn btn-xs btn-soft" onClick={onOpenArchive}>All cases</button>
         </div>
 
         {cases === null ? (
@@ -243,8 +243,7 @@ function DentistTechProfile({ lab, onBack, onAssign }) {
       </div>
 
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '10px 16px calc(10px + 24px)', background: 'rgba(243, 239, 232, 0.92)', backdropFilter: 'blur(20px) saturate(160%)', borderTop: '1px solid var(--line)', display: 'flex', gap: 8 }}>
-        <button className="btn btn-ghost" style={{ flex: 1 }}>Message</button>
-        <button className="btn btn-clay" style={{ flex: 1.4 }} onClick={() => onAssign && onAssign(services[0] || null)}>
+        <button className="btn btn-clay btn-block" onClick={() => onAssign && onAssign(services[0] || null)}>
           Send a case <Icon name="arrow-r" size={16} />
         </button>
       </div>

@@ -85,8 +85,13 @@ function Phone({ role = 'tech', userId, userProfile, onSwitchProfile }) {
           userId={userId}
           userProfile={userProfile}
           onSwitchProfile={onSwitchProfile}
+          onNavigate={id => setScreen(id)}
         />
       );
+      break;
+
+    case 'tech-archive':
+      body = <ArchiveScreen role="tech" userId={userId} onBack={() => setScreen('tech-profile')} />;
       break;
 
     // ── Dentist screens ───────────────────────────────────────
@@ -97,6 +102,7 @@ function Phone({ role = 'tech', userId, userProfile, onSwitchProfile }) {
           userProfile={userProfile}
           onOpenCase={c => { setSelectedCase(c); setScreen('chat-dent'); }}
           onBrowse={() => setScreen('dent-browse')}
+          onOpenArchive={() => setScreen('dent-archive')}
         />
       );
       break;
@@ -141,6 +147,7 @@ function Phone({ role = 'tech', userId, userProfile, onSwitchProfile }) {
           userId={userId}
           userProfile={userProfile}
           onSwitchProfile={onSwitchProfile}
+          onNavigate={id => setScreen(id)}
         />
       );
       break;
@@ -227,7 +234,7 @@ function Phone({ role = 'tech', userId, userProfile, onSwitchProfile }) {
 // ──────────────────────────────────────────────────────────────
 // Tech lab profile screen
 // ──────────────────────────────────────────────────────────────
-function LabProfileScreen({ userId, userProfile, onSwitchProfile }) {
+function LabProfileScreen({ userId, userProfile, onSwitchProfile, onNavigate }) {
   const myLab = window.CHAIRSIDE_SUPABASE.useMyLab(userId);
   const services = myLab?.services || [];
 
@@ -253,7 +260,7 @@ function LabProfileScreen({ userId, userProfile, onSwitchProfile }) {
           <SectionList title="Workspace" rows={[
             { icon: 'workflow', label: 'Services & workflows', sub: `${services.length} services` },
             { icon: 'template', label: 'Message templates' },
-            { icon: 'archive', label: 'Archive' },
+            { icon: 'archive', label: 'Archive', onClick: () => onNavigate && onNavigate('tech-archive') },
           ]} />
 
           <SectionList title="Settings" rows={[
@@ -273,7 +280,7 @@ function LabProfileScreen({ userId, userProfile, onSwitchProfile }) {
 // ──────────────────────────────────────────────────────────────
 // Dentist "Me" screen
 // ──────────────────────────────────────────────────────────────
-function DentistMeScreen({ userId, userProfile, onSwitchProfile }) {
+function DentistMeScreen({ userId, userProfile, onSwitchProfile, onNavigate }) {
   const myClinic = window.CHAIRSIDE_SUPABASE.useMyClinic(userId);
 
   return (
@@ -292,7 +299,7 @@ function DentistMeScreen({ userId, userProfile, onSwitchProfile }) {
           </div>
 
           <SectionList title="Workspace" rows={[
-            { icon: 'archive', label: 'Case archive' },
+            { icon: 'archive', label: 'Case archive', onClick: () => onNavigate && onNavigate('dent-archive') },
             { icon: 'lab', label: 'Saved labs' },
             { icon: 'wallet', label: 'Payment history' },
           ]} />
@@ -314,7 +321,7 @@ function DentistMeScreen({ userId, userProfile, onSwitchProfile }) {
 // ──────────────────────────────────────────────────────────────
 // Archive screen (real data from Supabase)
 // ──────────────────────────────────────────────────────────────
-function ArchiveScreen({ role, userId }) {
+function ArchiveScreen({ role, userId, onBack }) {
   const [archivedCases, setArchivedCases] = React.useState(null);
 
   React.useEffect(() => {
@@ -339,7 +346,7 @@ function ArchiveScreen({ role, userId }) {
   return (
     <div className="scr">
       <div className="scr-body scr-pad-top">
-        <ScreenHeader title="Archive" sub="Closed cases" />
+        <ScreenHeader title="Archive" sub="Closed cases" back={!!onBack} onBack={onBack} />
         {archivedCases === null ? (
           <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
         ) : archivedCases.length === 0 ? (
@@ -385,7 +392,8 @@ function SectionList({ title, rows }) {
       <div className="t-eyebrow" style={{ marginLeft: 2, marginBottom: 8 }}>{title}</div>
       <div className="card" style={{ padding: 0 }}>
         {rows.map((r, i) => (
-          <div key={r.label} className="row gap-12 row-tap" style={{ padding: '14px 14px', borderBottom: i < rows.length - 1 ? '1px solid var(--line)' : '0' }}>
+          <div key={r.label} className="row gap-12 row-tap" onClick={r.onClick}
+            style={{ padding: '14px 14px', borderBottom: i < rows.length - 1 ? '1px solid var(--line)' : '0', opacity: r.onClick ? 1 : 0.5 }}>
             <div style={{ width: 32, height: 32, borderRadius: 9, background: 'var(--surface-2)', color: 'var(--ink-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Icon name={r.icon} size={16} />
             </div>

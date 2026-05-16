@@ -78,11 +78,11 @@ function Stat({ label, value, tone }) {
 
 function CaseBoard({ cases, onOpenCase }) {
   const buckets = [
-    { key: 'received',   label: 'Received',   match: c => c.stage === 0 },
-    { key: 'prep',       label: 'In prep',     match: c => c.stage === 1 },
-    { key: 'production', label: 'Production',  match: c => c.stage >= 2 && c.stage <= 3 },
-    { key: 'finishing',  label: 'Finishing',   match: c => c.stage === 4 },
-    { key: 'ready',      label: 'Ready',       match: c => c.service && c.stage === (c.service.stages?.length || 1) - 1 && c.stage > 4 },
+    { key: 'received',   label: 'Received',   match: c => { const last = (c.service?.stages?.length || 1) - 1; return c.stage === 0 && c.stage < last; } },
+    { key: 'prep',       label: 'In prep',     match: c => { const last = (c.service?.stages?.length || 1) - 1; return c.stage === 1 && c.stage < last; } },
+    { key: 'production', label: 'Production',  match: c => { const last = (c.service?.stages?.length || 1) - 1; return c.stage >= 2 && c.stage <= 3 && c.stage < last; } },
+    { key: 'finishing',  label: 'Finishing',   match: c => { const last = (c.service?.stages?.length || 1) - 1; return c.stage === 4 && c.stage < last; } },
+    { key: 'ready',      label: 'Ready',       match: c => c.service && c.stage === (c.service.stages?.length || 1) - 1 },
   ];
 
   return (

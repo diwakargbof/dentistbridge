@@ -267,7 +267,8 @@
       const svc = allSvcs.find(s => s.id === payload.service_id) || null;
       const lab = (mock?.LABS || []).find(l => l.id === payload.lab_id) || null;
       const profile = (mock?.PROFILES || {})[payload.dentist_id];
-      return {
+      const now = new Date().toISOString();
+      const newCase = {
         id: 'C-' + (5000 + Math.floor(Math.random() * 999)),
         lab_id: payload.lab_id,
         dentist_id: payload.dentist_id,
@@ -279,12 +280,25 @@
         payment_status: 'pending',
         payment_amount: null,
         archived: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        created_at: now,
+        updated_at: now,
         service: svc,
         lab: lab ? { id: lab.id, name: lab.name, owner: lab.owner } : null,
         dentist: { full_name: profile?.full_name || 'Doctor' },
       };
+      if (mock) {
+        mock.CASES_DENTIST = [newCase, ...(mock.CASES_DENTIST || [])];
+        mock.CASES_TECH    = [newCase, ...(mock.CASES_TECH    || [])];
+        mock.MESSAGES      = mock.MESSAGES || {};
+        mock.MESSAGES[newCase.id] = [{
+          id: 'sys-' + newCase.id,
+          case_id: newCase.id, sender_id: null,
+          body: 'Case assigned — ' + new Date(now).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+          kind: 'system', metadata: {}, deleted_at: null, created_at: now,
+          sender: { full_name: 'Chairside', role: 'system' },
+        }];
+      }
+      return newCase;
     }
     const { data, error } = await db
       .from('cases')
