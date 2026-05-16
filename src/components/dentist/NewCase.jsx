@@ -123,6 +123,12 @@ export default function NewCase({ lab, onBack, onCreated }) {
           </div>
         )}
 
+        {!selectedSvc && services.length > 0 && (
+          <div style={{ textAlign: 'center', fontSize: 12.5, color: 'var(--muted)', marginBottom: -8 }}>
+            Select a service above to continue
+          </div>
+        )}
+
         <Button variant="clay" block onClick={handleCreate} disabled={loading || !selectedSvc}>
           {loading ? 'Sending…' : 'Send case to lab'}
         </Button>

@@ -25247,6 +25247,7 @@ function NewCase({ lab, onBack, onCreated }) {
           (_a = selectedSvc.price) == null ? void 0 : _a.toLocaleString("en-IN")
         ] })
       ] }),
+      !selectedSvc && services.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { textAlign: "center", fontSize: 12.5, color: "var(--muted)", marginBottom: -8 }, children: "Select a service above to continue" }),
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Button, { variant: "clay", block: true, onClick: handleCreate, disabled: loading || !selectedSvc, children: loading ? "Sending\u2026" : "Send case to lab" })
     ] })
   ] });
