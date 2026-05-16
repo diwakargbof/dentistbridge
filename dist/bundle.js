@@ -1095,7 +1095,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect10(create, deps) {
+        function useEffect11(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1878,7 +1878,7 @@ var require_react_development = __commonJS({
         exports.useContext = useContext2;
         exports.useDebugValue = useDebugValue;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect10;
+        exports.useEffect = useEffect11;
         exports.useId = useId;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useInsertionEffect = useInsertionEffect;
@@ -25194,6 +25194,9 @@ function NewCase({ lab, onBack, onCreated }) {
   const [loading, setLoading] = (0, import_react6.useState)(false);
   const [error, setError] = (0, import_react6.useState)("");
   const services = ((lab == null ? void 0 : lab.services) || []).filter((s) => s.active);
+  (0, import_react6.useEffect)(() => {
+    if (services.length === 1) setSelectedSvc(services[0]);
+  }, [services.length]);
   async function handleCreate() {
     if (!selectedSvc) {
       setError("Please select a service");

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '../../lib/api.js';
 import { Icon, Avatar, Stars, NavBack, Button, Field, ErrorBanner, Pill } from '../ui/index.jsx';
 
@@ -45,6 +45,11 @@ export default function NewCase({ lab, onBack, onCreated }) {
   const [error, setError]             = useState('');
 
   const services = (lab?.services || []).filter(s => s.active);
+
+  // Auto-select when there's only one service
+  useEffect(() => {
+    if (services.length === 1) setSelectedSvc(services[0]);
+  }, [services.length]);
 
   async function handleCreate() {
     if (!selectedSvc) { setError('Please select a service'); return; }

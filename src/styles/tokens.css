@@ -162,6 +162,7 @@ body {
   cursor: pointer; transition: transform .08s ease, background .12s ease;
 }
 .btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
 .btn-clay { background: var(--clay); border-color: var(--clay); color: #fff; }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
 .btn-soft { background: var(--surface-2); color: var(--ink); border-color: transparent; }
