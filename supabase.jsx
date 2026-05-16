@@ -19,6 +19,14 @@
     ? window.supabase.createClient(supabaseUrl, cfg.supabaseAnonKey)
     : null;
 
+  // ── Mock-mode helpers ────────────────────────────────────────
+  // isMock: true when Supabase is not configured OR userId is a static profile ID.
+  function isMock(userId) {
+    return !db || (typeof userId === 'string' && userId.startsWith('static-'));
+  }
+  // Callback registry for mock real-time message delivery.
+  const _msgCbs = {};
+
   // ── Auth ─────────────────────────────────────────────────────
   async function signUp(email, password, profileData) {
     if (!db) throw new Error('Supabase not configured');
@@ -228,7 +236,11 @@
   }
 
   async function fetchArchivedCases(role, userId) {
-    if (!db) return null;
+    if (isMock(userId)) {
+      const mock = window.CHAIRSIDE_MOCK_DATA;
+      if (!mock) return [];
+      return role === 'dentist' ? mock.ARCHIVED_DENT : mock.ARCHIVED_TECH;
+    }
     let labId = null;
     if (role === 'technician') {
       const { data: lab } = await db.from('labs').select('id').eq('owner_id', userId).single();
@@ -249,8 +261,31 @@
   }
 
   async function createCase(payload) {
-    if (!db) return null;
-    // id defaults to next_case_id() in the DB; don't pass it from JS
+    if (isMock(payload.dentist_id)) {
+      const mock = window.CHAIRSIDE_MOCK_DATA;
+      const allSvcs = (mock?.LABS || []).flatMap(l => l.services || []);
+      const svc = allSvcs.find(s => s.id === payload.service_id) || null;
+      const lab = (mock?.LABS || []).find(l => l.id === payload.lab_id) || null;
+      const profile = (mock?.PROFILES || {})[payload.dentist_id];
+      return {
+        id: 'C-' + (5000 + Math.floor(Math.random() * 999)),
+        lab_id: payload.lab_id,
+        dentist_id: payload.dentist_id,
+        service_id: payload.service_id,
+        patient_ref: payload.patient_ref || null,
+        notes: payload.notes || null,
+        stage: 0,
+        shade: null,
+        payment_status: 'pending',
+        payment_amount: null,
+        archived: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        service: svc,
+        lab: lab ? { id: lab.id, name: lab.name, owner: lab.owner } : null,
+        dentist: { full_name: profile?.full_name || 'Doctor' },
+      };
+    }
     const { data, error } = await db
       .from('cases')
       .insert(payload)
@@ -261,7 +296,7 @@
   }
 
   async function advanceCaseStage(caseId, newStage) {
-    if (!db) return null;
+    if (!db) return { id: caseId, stage: newStage };
     const { data, error } = await db
       .from('cases')
       .update({ stage: newStage })
@@ -274,7 +309,7 @@
 
   async function updateCaseNotes(caseId, updates) {
     // updates: { patient_ref?, notes?, shade? }
-    if (!db) return null;
+    if (!db) return { id: caseId, ...updates };
     const { data, error } = await db
       .from('cases')
       .update(updates)
@@ -286,7 +321,7 @@
   }
 
   async function updateCasePayment(caseId, status, amount) {
-    if (!db) return null;
+    if (!db) return { id: caseId, payment_status: status, payment_amount: amount ?? null };
     const { data, error } = await db
       .from('cases')
       .update({ payment_status: status, payment_amount: amount ?? undefined })
@@ -388,7 +423,19 @@
   }
 
   async function sendMessage(caseId, senderId, body, kind = 'text', metadata = {}) {
-    if (!db) return null;
+    if (!db) {
+      const mock = window.CHAIRSIDE_MOCK_DATA;
+      const p = (mock?.PROFILES || {})[senderId];
+      const msg = {
+        id: 'mock-' + Date.now(),
+        case_id: caseId, sender_id: senderId,
+        body, kind, metadata,
+        deleted_at: null, created_at: new Date().toISOString(),
+        sender: { full_name: p?.full_name || 'You', role: p?.role || 'dentist' },
+      };
+      if (_msgCbs[caseId]) _msgCbs[caseId](msg);
+      return msg;
+    }
     const { data, error } = await db
       .from('messages')
       .insert({ case_id: caseId, sender_id: senderId, body, kind, metadata })
@@ -411,7 +458,10 @@
 
   // ── Real-time subscriptions ───────────────────────────────────
   function subscribeToMessages(caseId, onInsert) {
-    if (!db) return () => {};
+    if (!db) {
+      _msgCbs[caseId] = onInsert;
+      return () => { delete _msgCbs[caseId]; };
+    }
     const channel = db
       .channel(`messages:${caseId}`)
       .on('postgres_changes', {
@@ -485,6 +535,11 @@
   function useCases(role, userId) {
     const [cases, setCases] = React.useState(null);
     React.useEffect(() => {
+      if (isMock(userId)) {
+        const mock = window.CHAIRSIDE_MOCK_DATA;
+        setCases(mock ? (role === 'dentist' ? mock.CASES_DENTIST : mock.CASES_TECH) : []);
+        return;
+      }
       if (!userId) { setCases([]); return; }
       fetchCases(role, userId).then(data => setCases(data ?? []));
     }, [role, userId]);
@@ -494,6 +549,10 @@
   function useMyLab(userId) {
     const [lab, setLab] = React.useState(undefined);
     React.useEffect(() => {
+      if (isMock(userId)) {
+        setLab(window.CHAIRSIDE_MOCK_DATA?.MY_LAB || null);
+        return;
+      }
       if (!userId) { setLab(null); return; }
       fetchMyLab(userId).then(data => setLab(data));
     }, [userId]);
@@ -503,6 +562,10 @@
   function useMyClinic(userId) {
     const [clinic, setClinic] = React.useState(undefined);
     React.useEffect(() => {
+      if (isMock(userId)) {
+        setClinic(window.CHAIRSIDE_MOCK_DATA?.MY_CLINIC || null);
+        return;
+      }
       if (!userId) { setClinic(null); return; }
       fetchMyClinic(userId).then(data => setClinic(data));
     }, [userId]);
@@ -513,10 +576,14 @@
     const [messages, setMessages] = React.useState(null);
     React.useEffect(() => {
       if (!caseId) return;
-      fetchMessages(caseId).then(data => { if (data !== null) setMessages(data); });
-      return subscribeToMessages(caseId, msg => {
-        setMessages(prev => prev ? [...prev, msg] : [msg]);
-      });
+      const onInsert = msg => setMessages(prev => prev ? [...prev, msg] : [msg]);
+      if (!db) {
+        const mock = window.CHAIRSIDE_MOCK_DATA;
+        setMessages([...((mock?.MESSAGES || {})[caseId] || [])]);
+      } else {
+        fetchMessages(caseId).then(data => { if (data !== null) setMessages(data); });
+      }
+      return subscribeToMessages(caseId, onInsert);
     }, [caseId]);
     return [messages, setMessages];
   }
@@ -524,6 +591,10 @@
   function useLabs() {
     const [labs, setLabs] = React.useState(null);
     React.useEffect(() => {
+      if (!db) {
+        setLabs(window.CHAIRSIDE_MOCK_DATA?.LABS || []);
+        return;
+      }
       fetchLabs().then(data => { if (data !== null) setLabs(data); });
     }, []);
     return labs;
