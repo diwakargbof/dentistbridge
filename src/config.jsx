@@ -9,12 +9,9 @@
 // To add a user, copy a line. No build step needed.
 
 const ALLOWED_USERS = {
-  // ─── Receptionist ────────────────────────────────────────────
-  '+919876543201': {
-    role: 'receptionist',
-    id: 'u-priya',
-    name: 'Priya Naik',
-  },
+  // ─── Receptionists ───────────────────────────────────────────
+  '+919876543201': { role: 'receptionist', id: 'u-recep1', name: 'Receptionist1' },
+  '+919876543202': { role: 'receptionist', id: 'u-recep2', name: 'Receptionist2' },
 
   // ─── Stage workers ───────────────────────────────────────────
   '+919876543210': { role: 'worker', id: 'u-rakesh',  name: 'Rakesh Pawar',   stageId: 'st-design' },
@@ -28,12 +25,9 @@ const ALLOWED_USERS = {
   '+910000000002': { role: 'worker', id: 'u-worker2', name: 'Worker 2', stageId: 'st-mill'   },
   '+910000000003': { role: 'worker', id: 'u-worker3', name: 'Worker 3', stageId: 'st-finish' },
 
-  // ─── Owner / Manager ─────────────────────────────────────────
-  '+919876543220': {
-    role: 'owner',
-    id: 'u-vikram',
-    name: 'Vikram Iyer',
-  },
+  // ─── Owners ──────────────────────────────────────────────────
+  '+919876543220': { role: 'owner', id: 'u-vishwanath', name: 'Vishwanath' },
+  '+919876543221': { role: 'owner', id: 'u-anu',        name: 'Anu'        },
 
   // ─── Admin ───────────────────────────────────────────────────
   '+919876543230': {
@@ -46,8 +40,10 @@ const ALLOWED_USERS = {
 // Demo accounts shown on the login screen as quick-fill buttons.
 // Remove in production.
 const DEMO_LOGINS = [
-  { phone: '+919876543220', label: 'Vikram · Owner' },
-  { phone: '+919876543201', label: 'Priya · Reception' },
+  { phone: '+919876543220', label: 'Vishwanath · Owner' },
+  { phone: '+919876543221', label: 'Anu · Owner' },
+  { phone: '+919876543201', label: 'Receptionist1' },
+  { phone: '+919876543202', label: 'Receptionist2' },
   { phone: '+910000000001', label: 'Worker 1 · Design' },
   { phone: '+910000000002', label: 'Worker 2 · Mill' },
   { phone: '+910000000003', label: 'Worker 3 · Finish' },
@@ -59,7 +55,7 @@ const DEMO_LOGINS = [
 // First-load only; on subsequent loads, the admin's edits win.
 // ────────────────────────────────────────────────────────────────────
 const LAB_CONFIG_DEFAULTS = {
-  labName: 'Iyer Dental Lab',
+  labName: 'Southmandentallab',
   labCity: 'Mumbai',
   labPhone: '+91 22 4444 0000',
   warrantyMonths: 12,

@@ -2,7 +2,8 @@
 // Update both files together when adding/removing users.
 
 const ALLOWED_USERS = {
-  '+919876543201': { role: 'receptionist', id: 'u-priya',  name: 'Priya Naik' },
+  '+919876543201': { role: 'receptionist', id: 'u-recep1', name: 'Receptionist1' },
+  '+919876543202': { role: 'receptionist', id: 'u-recep2', name: 'Receptionist2' },
   '+919876543210': { role: 'worker', id: 'u-rakesh', name: 'Rakesh Pawar',  stageId: 'st-design' },
   '+919876543211': { role: 'worker', id: 'u-sumit',  name: 'Sumit Yadav',   stageId: 'st-mill'   },
   '+919876543212': { role: 'worker', id: 'u-anjali', name: 'Anjali Desai',  stageId: 'st-finish' },
@@ -11,7 +12,8 @@ const ALLOWED_USERS = {
   '+910000000001': { role: 'worker', id: 'u-worker1', name: 'Worker 1',     stageId: 'st-design' },
   '+910000000002': { role: 'worker', id: 'u-worker2', name: 'Worker 2',     stageId: 'st-mill'   },
   '+910000000003': { role: 'worker', id: 'u-worker3', name: 'Worker 3',     stageId: 'st-finish' },
-  '+919876543220': { role: 'owner',  id: 'u-vikram',  name: 'Vikram Iyer' },
+  '+919876543220': { role: 'owner', id: 'u-vishwanath', name: 'Vishwanath' },
+  '+919876543221': { role: 'owner', id: 'u-anu',        name: 'Anu'        },
   '+919876543230': { role: 'admin',  id: 'u-admin',  name: 'System Admin' },
 };
 
