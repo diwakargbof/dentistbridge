@@ -4,24 +4,63 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f3efe8" />
-  <meta name="description" content="Chairside — Between the chair and the bench. Case-by-case workflow tracking for dental labs and dentists." />
-  <title>Chairside</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>Bench · dental lab operations</title>
+  <meta name="description" content="Every case accounted for. Internal operations for a dental laboratory." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/styles/tokens.css" />
+  <link rel="stylesheet" href="tokens.css" />
 
-  <!-- Runtime config injected by Express (Supabase keys) -->
-  <script src="/config.js" onerror="window.CHAIRSIDE_CONFIG={}"></script>
+  <!-- Runtime config (Supabase URL + anon key for Realtime) -->
+  <script src="/config.js" onerror="window.BENCH_CLOUD={}"></script>
 
-  <!-- Supabase JS (UMD) for Realtime subscriptions -->
+  <!-- Supabase JS for Realtime subscriptions -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- Core libs -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Barcode scan + PDF + barcode draw -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
-  <script src="/bundle.js"></script>
+
+  <noscript>
+    <div style="font-family: system-ui, sans-serif; padding: 40px; max-width: 520px; margin: 0 auto;">
+      <h1>Bench needs JavaScript</h1>
+      <p>This is a single-page web app. Please enable JavaScript and reload.</p>
+    </div>
+  </noscript>
+
+  <!-- config + state -->
+  <script type="text/babel" src="config.jsx"></script>
+  <script type="text/babel" src="store.jsx"></script>
+  <script type="text/babel" src="router.jsx"></script>
+
+  <!-- ui + shell -->
+  <script type="text/babel" src="ui.jsx"></script>
+  <script type="text/babel" src="shell.jsx"></script>
+
+  <!-- camera scanner + PDF generators -->
+  <script type="text/babel" src="scanner.jsx"></script>
+  <script type="text/babel" src="pdfgen.jsx"></script>
+
+  <!-- screens -->
+  <script type="text/babel" src="screens-auth.jsx"></script>
+  <script type="text/babel" src="screens-case.jsx"></script>
+  <script type="text/babel" src="screens-worker.jsx"></script>
+  <script type="text/babel" src="screens-reception.jsx"></script>
+  <script type="text/babel" src="screens-owner.jsx"></script>
+  <script type="text/babel" src="screens-admin.jsx"></script>
+
+  <!-- mount -->
+  <script type="text/babel" src="app.jsx"></script>
 </body>
 </html>

@@ -9,26 +9,25 @@ const PORT = process.env.PORT || 3000;
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 
-// Serve runtime config to inject Supabase keys without exposing them in the bundle
+// Expose Supabase URL + anon key for client-side Realtime subscriptions
 app.get('/config.js', (req, res) => {
   res.type('application/javascript');
-  res.send(`window.CHAIRSIDE_CONFIG = ${JSON.stringify({
-    supabaseUrl: process.env.SUPABASE_URL || '',
+  res.send(`window.BENCH_CLOUD = ${JSON.stringify({
+    supabaseUrl:     (process.env.SUPABASE_URL || '').replace(/\/$/, ''),
     supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
   })};`);
 });
 
-// API routes
-app.use('/api/auth',     require('./routes/auth'));
-app.use('/api/cases',    require('./routes/cases'));
-app.use('/api/labs',     require('./routes/labs'));
-app.use('/api/services', require('./routes/services'));
-app.use('/api/messages', require('./routes/messages'));
-app.use('/api/shade',    require('./routes/shade'));
-app.use('/api/upload',   require('./routes/upload'));
+// Bench API
+app.use('/api/bench', require('./routes/bench'));
 
-// Serve compiled frontend
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+// Serve .jsx files as JavaScript so Babel standalone can fetch and transpile them
+app.use((req, res, next) => {
+  if (req.path.endsWith('.jsx')) res.type('application/javascript');
+  next();
+});
+
+// Serve frontend files
 app.use(express.static(path.join(__dirname, '..', 'src')));
 
 // SPA fallback
@@ -37,5 +36,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Chairside running at http://localhost:${PORT}`);
+  console.log(`Bench running at http://localhost:${PORT}`);
 });
