@@ -17,75 +17,7 @@ function newCaseId(when = new Date()) {
 // ─── Seed data ────────────────────────────────────────────────────────
 function makeSeed() {
   const cfg = window.BENCH_CONFIG.LAB_CONFIG_DEFAULTS;
-  const stageIds = cfg.stages.map(s => s.id);
-  const now = Date.now();
-  const day = 86400000;
-
-  const seeds = [
-    { dy: 6,   stage: 0,  ct: 'ct-crown',   pt: 'Riya Shah',      dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'normal',    units: 1, due: now + 5*day,    ins: 'Margin sub-gingival on the distal.' },
-    { dy: 5,   stage: 0,  ct: 'ct-bridge',  pt: 'Mohan Verma',    dn: 'Dr. Karan Mehta', dc: 'Mehta Smile Studio',  u: 'district',  units: 3, due: now + 2*day,    ins: '3-unit bridge #11-13.' },
-    { dy: 5,   stage: 1,  ct: 'ct-crown',   pt: 'Aisha Khan',     dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'emergency', units: 1, due: now + 0.5*day,  ins: 'Urgent — patient travels Friday.' },
-    { dy: 4,   stage: 1,  ct: 'ct-veneer',  pt: 'Sneha Kapoor',   dn: 'Dr. Meera Singh', dc: 'Singh Dental Clinic', u: 'normal',    units: 2, due: now + 4*day,    ins: 'Hand-layered, A1 shade.' },
-    { dy: 4,   stage: 2,  ct: 'ct-crown',   pt: 'Karan Bhatia',   dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'normal',    units: 1, due: now + 3*day,    ins: '' },
-    { dy: 4,   stage: 2,  ct: 'ct-inlay',   pt: 'Maya Iyer',      dn: 'Dr. Karan Mehta', dc: 'Mehta Smile Studio',  u: 'district',  units: 1, due: now + 1*day,    ins: 'E.max, B2 shade.' },
-    { dy: 3,   stage: 3,  ct: 'ct-crown',   pt: 'Imran Sayed',    dn: 'Dr. Meera Singh', dc: 'Singh Dental Clinic', u: 'normal',    units: 1, due: now + 2*day,    ins: '' },
-    { dy: 3,   stage: 3,  ct: 'ct-bridge',  pt: 'Reema Pillai',   dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'district',  units: 4, due: now + 1*day,    ins: '4-unit zirconia bridge.' },
-    { dy: 2,   stage: 4,  ct: 'ct-crown',   pt: 'Arjun Nair',     dn: 'Dr. Karan Mehta', dc: 'Mehta Smile Studio',  u: 'normal',    units: 2, due: now + 1*day,    ins: 'QC for shade match.' },
-    { dy: 1,   stage: 4,  ct: 'ct-veneer',  pt: 'Priya Joshi',    dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'emergency', units: 2, due: now - 0.2*day,  ins: 'OVERDUE — confirm with dentist.' },
-    { dy: 0.2, stage: -1, ct: 'ct-crown',   pt: 'Yash Patel',     dn: 'Dr. Meera Singh', dc: 'Singh Dental Clinic', u: 'normal',    units: 1, due: now + 6*day,    ins: '' },
-    { dy: 0.1, stage: -1, ct: 'ct-night',   pt: 'Tara Wadia',     dn: 'Dr. Karan Mehta', dc: 'Mehta Smile Studio',  u: 'normal',    units: 1, due: now + 7*day,    ins: 'Heavy bruxer.' },
-    { dy: 7,   stage: 5,  ct: 'ct-crown',   pt: 'Dev Saxena',     dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'normal',    units: 1, due: now - 1*day,    ins: '', dispatched: true },
-    { dy: 8,   stage: 5,  ct: 'ct-bridge',  pt: 'Aditi Sharma',   dn: 'Dr. Karan Mehta', dc: 'Mehta Smile Studio',  u: 'normal',    units: 3, due: now - 2*day,    ins: '', dispatched: true, warranty: true },
-    { dy: 10,  stage: 5,  ct: 'ct-veneer',  pt: 'Ravi Krishnan',  dn: 'Dr. Meera Singh', dc: 'Singh Dental Clinic', u: 'normal',    units: 4, due: now - 4*day,    ins: '', dispatched: true, warranty: true },
-    { dy: 5,   stage: 4,  ct: 'ct-denture', pt: 'Sushila Bhatt',  dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'normal',    units: 1, due: now + 8*day,    ins: 'Trial sent for verification.', status: 'on_trial' },
-    { dy: 4,   stage: 1,  ct: 'ct-crown',   pt: 'Manoj Rai',      dn: 'Dr. Karan Mehta', dc: 'Mehta Smile Studio',  u: 'normal',    units: 1, due: now + 10*day,   ins: 'Awaiting clarification.', status: 'on_hold' },
-    { dy: 6,   stage: 0,  ct: 'ct-crown',   pt: 'Naina Sethi',    dn: 'Dr. Anaya Rao',   dc: 'Rao Family Dental',   u: 'district',  units: 1, due: now + 3*day,    ins: '', status: 'cancelled', cancelReason: 'Dentist withdrew' },
-  ];
-
-  const cases = {};
-  const audit = [];
-  let counter = 4801;
-
-  seeds.forEach((s, idx) => {
-    const createdAt = now - s.dy * day;
-    const id = `DL-${dateId(new Date(createdAt))}-${String(counter++).padStart(4, '0')}`;
-    const stageProgress = [];
-    const lastStageDone = Math.min(s.stage, stageIds.length - 1);
-    for (let i = 0; i < lastStageDone; i++) {
-      const t = createdAt + (i + 1) * 0.5 * day;
-      stageProgress.push({ stageId: stageIds[i], completedBy: ['u-rakesh','u-sumit','u-anjali','u-naveen','u-deepa'][i], completedAt: t });
-    }
-    const c = {
-      id, caseType: s.ct, patient: s.pt, dentistName: s.dn, dentistClinic: s.dc,
-      urgency: s.u, units: s.units, dueDate: s.due, instructions: s.ins,
-      currentStageIdx: s.stage, stageProgress,
-      status: s.status || (s.dispatched ? 'dispatched' : 'active'),
-      createdAt, updatedAt: createdAt + lastStageDone * 0.5 * day,
-      dispatched: !!s.dispatched,
-      dispatchedAt: s.dispatched ? createdAt + (stageIds.length + 1) * 0.5 * day : null,
-      cancelReason: s.cancelReason || null,
-      warranty: s.warranty ? {
-        number: 'WAR-' + dateId(new Date(createdAt + (stageIds.length + 2) * 0.5 * day)) + '-' + String(idx + 1).padStart(3, '0'),
-        issuedAt: createdAt + (stageIds.length + 2) * 0.5 * day,
-        voidedAt: null, voidReason: null, months: cfg.warrantyMonths,
-      } : null,
-    };
-    cases[id] = c;
-    audit.push({ id: 'a' + audit.length, caseId: id, at: createdAt, actorId: 'u-priya', actorName: 'Priya Naik', action: 'received', meta: { from: s.dn } });
-    stageProgress.forEach(sp => {
-      const stageName = cfg.stages.find(st => st.id === sp.stageId)?.name;
-      const workerName = Object.values(window.BENCH_CONFIG.ALLOWED_USERS).find(u => u.id === sp.completedBy)?.name || sp.completedBy;
-      audit.push({ id: 'a' + audit.length, caseId: id, at: sp.completedAt, actorId: sp.completedBy, actorName: workerName, action: 'stage_complete', meta: { stageId: sp.stageId, stageName } });
-    });
-    if (c.dispatched)             audit.push({ id: 'a' + audit.length, caseId: id, at: c.dispatchedAt, actorId: 'u-priya', actorName: 'Priya Naik', action: 'dispatched', meta: {} });
-    if (c.warranty)               audit.push({ id: 'a' + audit.length, caseId: id, at: c.warranty.issuedAt, actorId: 'u-priya', actorName: 'Priya Naik', action: 'warranty_issued', meta: { number: c.warranty.number, months: c.warranty.months } });
-    if (c.status === 'cancelled') audit.push({ id: 'a' + audit.length, caseId: id, at: createdAt + 0.2*day, actorId: 'u-vikram', actorName: 'Vikram Iyer', action: 'cancelled', meta: { reason: c.cancelReason } });
-    if (c.status === 'on_hold')   audit.push({ id: 'a' + audit.length, caseId: id, at: c.updatedAt + 0.5*day, actorId: 'u-vikram', actorName: 'Vikram Iyer', action: 'on_hold', meta: {} });
-    if (c.status === 'on_trial')  audit.push({ id: 'a' + audit.length, caseId: id, at: c.updatedAt, actorId: 'u-priya', actorName: 'Priya Naik', action: 'trial_sent', meta: {} });
-  });
-
-  audit.sort((a, b) => a.at - b.at);
-  return { cases, audit, notifications: [], labConfig: JSON.parse(JSON.stringify(cfg)) };
+  return { cases: {}, audit: [], notifications: [], labConfig: JSON.parse(JSON.stringify(cfg)) };
 }
 
 // ─── Local persistence (offline fallback) ────────────────────────────

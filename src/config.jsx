@@ -14,13 +14,6 @@ const ALLOWED_USERS = {
   '+919876543202': { role: 'receptionist', id: 'u-recep2', name: 'Receptionist2' },
 
   // ─── Stage workers ───────────────────────────────────────────
-  '+919876543210': { role: 'worker', id: 'u-rakesh',  name: 'Rakesh Pawar',   stageId: 'st-design' },
-  '+919876543211': { role: 'worker', id: 'u-sumit',   name: 'Sumit Yadav',    stageId: 'st-mill'   },
-  '+919876543212': { role: 'worker', id: 'u-anjali',  name: 'Anjali Desai',   stageId: 'st-finish' },
-  '+919876543213': { role: 'worker', id: 'u-naveen',  name: 'Naveen Kumar',   stageId: 'st-glaze'  },
-  '+919876543214': { role: 'worker', id: 'u-deepa',   name: 'Deepa Iyer',     stageId: 'st-qc'     },
-
-  // ─── Demo workers (easy phone numbers for testing) ───────────
   '+910000000001': { role: 'worker', id: 'u-worker1', name: 'Worker 1', stageId: 'st-design' },
   '+910000000002': { role: 'worker', id: 'u-worker2', name: 'Worker 2', stageId: 'st-mill'   },
   '+910000000003': { role: 'worker', id: 'u-worker3', name: 'Worker 3', stageId: 'st-finish' },
@@ -30,11 +23,7 @@ const ALLOWED_USERS = {
   '+919876543221': { role: 'owner', id: 'u-anu',        name: 'Anu'        },
 
   // ─── Admin ───────────────────────────────────────────────────
-  '+919876543230': {
-    role: 'admin',
-    id: 'u-admin',
-    name: 'System Admin',
-  },
+  '+919876543230': { role: 'admin', id: 'u-admin', name: 'Admin' },
 };
 
 // Demo accounts shown on the login screen as quick-fill buttons.
@@ -55,7 +44,7 @@ const DEMO_LOGINS = [
 // First-load only; on subsequent loads, the admin's edits win.
 // ────────────────────────────────────────────────────────────────────
 const LAB_CONFIG_DEFAULTS = {
-  labName: 'Southmandentallab',
+  labName: 'southamandentallab',
   labCity: 'Mumbai',
   labPhone: '+91 22 4444 0000',
   warrantyMonths: 12,
