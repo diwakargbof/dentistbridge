@@ -23,6 +23,11 @@ const ALLOWED_USERS = {
   '+919876543213': { role: 'worker', id: 'u-naveen',  name: 'Naveen Kumar',   stageId: 'st-glaze'  },
   '+919876543214': { role: 'worker', id: 'u-deepa',   name: 'Deepa Iyer',     stageId: 'st-qc'     },
 
+  // ─── Demo workers (easy phone numbers for testing) ───────────
+  '+910000000001': { role: 'worker', id: 'u-worker1', name: 'Worker 1', stageId: 'st-design' },
+  '+910000000002': { role: 'worker', id: 'u-worker2', name: 'Worker 2', stageId: 'st-mill'   },
+  '+910000000003': { role: 'worker', id: 'u-worker3', name: 'Worker 3', stageId: 'st-finish' },
+
   // ─── Owner / Manager ─────────────────────────────────────────
   '+919876543220': {
     role: 'owner',
@@ -43,8 +48,9 @@ const ALLOWED_USERS = {
 const DEMO_LOGINS = [
   { phone: '+919876543220', label: 'Vikram · Owner' },
   { phone: '+919876543201', label: 'Priya · Reception' },
-  { phone: '+919876543210', label: 'Rakesh · Design worker' },
-  { phone: '+919876543212', label: 'Anjali · Finish worker' },
+  { phone: '+910000000001', label: 'Worker 1 · Design' },
+  { phone: '+910000000002', label: 'Worker 2 · Mill' },
+  { phone: '+910000000003', label: 'Worker 3 · Finish' },
   { phone: '+919876543230', label: 'Admin' },
 ];
 

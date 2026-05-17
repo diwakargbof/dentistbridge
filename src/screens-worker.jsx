@@ -6,23 +6,121 @@ function WorkerScanHome() {
   const myStage = sel.stageById(me.stageId);
   const [scanning, setScanning] = React.useState(false);
   const [notFound, setNotFound] = React.useState(null);
+  const [wrongStage, setWrongStage] = React.useState(null); // { c, currentStageName }
+  const [justDone, setJustDone] = React.useState(null);     // { c, nextStage }
 
-  // Cases at my stage
   const myQueue = sel.casesForStage(me.stageId);
-  // My recent history (today)
   const myToday = sel.casesByWorker(me.id)
     .filter(a => Date.now() - a.at < 86400000)
     .slice(0, 4);
 
+  function clearAlerts() {
+    setNotFound(null); setWrongStage(null);
+  }
+
   function handleScan(text) {
     setScanning(false);
+    clearAlerts();
+    setJustDone(null);
+
     const id = text.trim().toUpperCase();
     const c = sel.caseById(id);
-    if (!c) {
-      setNotFound(id);
+
+    if (!c) { setNotFound(id); return; }
+
+    const myStageIdx = sel.stages.findIndex(s => s.id === me.stageId);
+
+    // Case not at this worker's station
+    if (c.currentStageIdx !== myStageIdx) {
+      const currentStageName = c.currentStageIdx < 0
+        ? 'Reception (not started)'
+        : c.currentStageIdx >= sel.stages.length
+          ? 'Done (awaiting dispatch)'
+          : sel.stages[c.currentStageIdx]?.name || 'another stage';
+      setWrongStage({ c, currentStageName });
       return;
     }
-    nav('/case/' + c.id);
+
+    // Case isn't active (on hold, cancelled, etc.)
+    if (c.status !== 'active') {
+      setWrongStage({ c, currentStageName: c.status });
+      return;
+    }
+
+    // ✓ Auto-complete this stage
+    dispatch({ type: 'COMPLETE_STAGE', payload: { caseId: c.id, actor: me, stageId: me.stageId } });
+    const nextStage = sel.stages[myStageIdx + 1] || null;
+    setJustDone({ c, nextStage });
+  }
+
+  // Success confirmation card shown after scan
+  if (justDone) {
+    const { c, nextStage } = justDone;
+    return (
+      <Shell title={false}>
+        <div className="pg" style={{ paddingTop: 40, paddingBottom: 40 }}>
+          {/* Big success state */}
+          <div style={{ textAlign: 'center', marginBottom: 32 }}>
+            <div style={{
+              width: 80, height: 80, borderRadius: 40,
+              background: 'var(--ok-soft)', margin: '0 auto 16px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Icon name="check-circle" size={40} color="var(--ok)" />
+            </div>
+            <div className="t-eyebrow" style={{ color: 'var(--ok-ink)', marginBottom: 6 }}>
+              {myStage?.name} complete
+            </div>
+            <div className="serif" style={{ fontSize: 28, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              {c.patient}
+            </div>
+            <div className="mono muted" style={{ fontSize: 13, marginTop: 6 }}>
+              {c.id}
+            </div>
+          </div>
+
+          {/* Case summary */}
+          <div className="card" style={{ marginBottom: 14 }}>
+            <div className="row between" style={{ marginBottom: 8 }}>
+              <span className="t-eyebrow">Case</span>
+              <span className="pill">{sel.caseTypeName(c.caseType)}</span>
+            </div>
+            <div style={{ fontSize: 13.5, color: 'var(--ink-2)' }}>{c.dentistName}</div>
+            {nextStage ? (
+              <div className="row gap-8" style={{ marginTop: 10, padding: '8px 10px', background: 'var(--clay-soft)', borderRadius: 8 }}>
+                <Icon name="arrow-r" size={14} color="var(--clay-ink)" />
+                <span style={{ fontSize: 13, color: 'var(--clay-ink)', fontWeight: 500 }}>
+                  Next: {nextStage.name} station notified
+                </span>
+              </div>
+            ) : (
+              <div className="row gap-8" style={{ marginTop: 10, padding: '8px 10px', background: 'var(--ok-soft)', borderRadius: 8 }}>
+                <Icon name="truck" size={14} color="var(--ok-ink)" />
+                <span style={{ fontSize: 13, color: 'var(--ok-ink)', fontWeight: 500 }}>
+                  All stages done · Reception notified for dispatch
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="col gap-10">
+            <button
+              className="btn btn-clay btn-lg btn-block"
+              onClick={() => { setJustDone(null); clearAlerts(); }}
+            >
+              <Icon name="scan" size={18} />
+              Scan next case
+            </button>
+            <button
+              className="btn btn-ghost btn-block"
+              onClick={() => { setJustDone(null); nav('/case/' + c.id); }}
+            >
+              View case details
+            </button>
+          </div>
+        </div>
+      </Shell>
+    );
   }
 
   return (
@@ -37,14 +135,15 @@ function WorkerScanHome() {
 
       <div className="pg" style={{ paddingTop: 8 }}>
         {/* Primary CTA — scan */}
-        <button className="scan-cta" onClick={() => { setNotFound(null); setScanning(true); }}>
+        <button className="scan-cta" onClick={() => { clearAlerts(); setScanning(true); }}>
           <div className="scan-frame">
             <Icon name="barcode" size={42} color="#fff" />
           </div>
           <div className="label">Scan a case</div>
-          <div className="sub">Open the camera and point at the barcode</div>
+          <div className="sub">Scanning marks your stage complete instantly</div>
         </button>
 
+        {/* Error: not found */}
         {notFound && (
           <div className="card" style={{ marginTop: 14, background: 'var(--danger-soft)', border: 'none' }}>
             <div className="row gap-8" style={{ marginBottom: 4, color: 'var(--danger-ink)' }}>
@@ -52,9 +151,28 @@ function WorkerScanHome() {
               <span style={{ fontWeight: 600, fontSize: 14 }}>Case not found</span>
             </div>
             <div style={{ color: 'var(--danger-ink)', fontSize: 13 }}>
-              <span className="mono">{notFound}</span> doesn't match any case in the system. Ask reception to check.
+              <span className="mono">{notFound}</span> doesn't match any case. Ask reception to check the label.
             </div>
-            <button className="btn btn-xs btn-ghost" style={{ marginTop: 10 }} onClick={() => setNotFound(null)}>Dismiss</button>
+            <button className="btn btn-xs btn-ghost" style={{ marginTop: 10 }} onClick={clearAlerts}>Dismiss</button>
+          </div>
+        )}
+
+        {/* Error: wrong stage */}
+        {wrongStage && (
+          <div className="card" style={{ marginTop: 14, background: 'var(--warn-soft)', border: 'none' }}>
+            <div className="row gap-8" style={{ marginBottom: 4, color: 'var(--warn-ink)' }}>
+              <Icon name="warning" size={16} />
+              <span style={{ fontWeight: 600, fontSize: 14 }}>Not at your station</span>
+            </div>
+            <div style={{ color: 'var(--warn-ink)', fontSize: 13, marginBottom: 10 }}>
+              <span style={{ fontWeight: 600 }}>{wrongStage.c.patient}</span> ({wrongStage.c.id}) is currently at{' '}
+              <span style={{ fontWeight: 600 }}>{wrongStage.currentStageName}</span>. You are assigned to{' '}
+              <span style={{ fontWeight: 600 }}>{myStage?.name}</span>.
+            </div>
+            <div className="row gap-8">
+              <button className="btn btn-xs btn-ghost" onClick={clearAlerts}>Dismiss</button>
+              <button className="btn btn-xs btn-soft" onClick={() => { clearAlerts(); nav('/case/' + wrongStage.c.id); }}>View case</button>
+            </div>
           </div>
         )}
 
@@ -102,7 +220,7 @@ function WorkerScanHome() {
         <Scanner
           onScan={handleScan}
           onClose={() => setScanning(false)}
-          helperText={`Scan a case to work on it at ${myStage?.name}.`}
+          helperText={`Scan to mark ${myStage?.name} complete.`}
         />
       )}
     </Shell>
