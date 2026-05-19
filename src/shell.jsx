@@ -111,6 +111,9 @@ function Shell({ children, title, back, action, wide }) {
               </button>
             )}
             {action}
+            <button className="btn-icon ghost hide-desktop" onClick={logout} title="Sign out">
+              <Icon name="logout" size={18} />
+            </button>
           </header>
         )}
 

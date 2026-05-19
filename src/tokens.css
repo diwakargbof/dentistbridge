@@ -105,6 +105,8 @@ body {
   min-height: 100dvh;
 }
 .sidebar { display: none; }
+.hide-desktop { display: flex; }
+@media (min-width: 900px) { .hide-desktop { display: none !important; } }
 
 @media (min-width: 900px) {
   .app { grid-template-columns: var(--sidebar-w) 1fr; }
